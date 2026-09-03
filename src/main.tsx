@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { HelpPage } from "./screens/ajuda/help-page";
+import { LgpdPage, PrivacyPage, TermsPage } from "./screens/legal-pages";
 import { ReferralsPage } from "./screens/referrals-page";
 import { SalesPage } from "./screens/sales-page";
 import "./index.css";
@@ -27,6 +28,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/ajuda/:slug" element={<HelpPage />} />
         <Route path="/programa-de-afiliados" element={<HelpPage />} />
         <Route path="/indicacoes" element={<ReferralsPage />} />
+        <Route path="/privacidade" element={<PrivacyPage />} />
+        <Route path="/termos" element={<TermsPage />} />
+        <Route path="/lgpd" element={<LgpdPage />} />
         <Route path="*" element={<SalesPage />} />
       </Routes>
     </BrowserRouter>

@@ -1148,9 +1148,9 @@ export function SalesPage() {
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#667085]">Usamos cookies para melhorar sua experiência, analisar tráfego e personalizar conteúdo.</p>
             <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-[#667085]">
               Ao continuar usando o Nex Notas, você concorda com nossa{" "}
-              <a className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline" href="https://nexnotas.com.br/privacidade" target="_blank" rel="noreferrer">Política de Privacidade</a>{" "}
+              <a className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline" href="/privacidade">Política de Privacidade</a>{" "}
               e nossos{" "}
-              <a className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline" href="https://nexnotas.com.br/termos" target="_blank" rel="noreferrer">Termos de Uso</a>.
+              <a className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline" href="/termos">Termos de Uso</a>.
             </p>
             <div className="mt-5 flex justify-center">
               <Button className="min-w-[170px] rounded-[10px] bg-[#4f56f6] text-white hover:bg-[#454cf0]" onClick={() => updateCookiePreferences(allCookiePreferences)}>Aceitar todos</Button>
