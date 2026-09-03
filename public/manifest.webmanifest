@@ -1,0 +1,24 @@
+{
+  "name": "NexNotas",
+  "short_name": "NexNotas",
+  "description": "Emissão de NFS-e pelo Emissor Nacional em uma experiência mobile segura.",
+  "start_url": "/app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F7F8FC",
+  "theme_color": "#4F56F6",
+  "icons": [
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

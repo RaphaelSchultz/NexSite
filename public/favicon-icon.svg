@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="brandGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6A4DF6"/>
+      <stop offset="52%" stop-color="#4F56F6"/>
+      <stop offset="100%" stop-color="#536BFF"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(8 9) scale(0.2857142857142857) translate(-15 -33)" fill="url(#brandGradient)">
+    <path d="M29 34 C23 34 18 37 16 43 C15 46 15 49 15 52 L16 74 C16 78 18 81 21 84 L117 184 C122 189 129 193 137 194 L174 194 C181 194 186 189 188 182 C189 176 187 171 183 167 L64 40 C60 36 55 34 50 34 Z"/>
+    <path d="M108 33 C103 33 99 35 97 38 C96 41 98 44 100 46 L177 132 C180 135 183 137 186 136 C188 135 188 132 188 129 L188 48 C188 40 181 33 173 33 Z"/>
+    <path d="M19 104 C17 104 15 106 15 109 L15 179 C15 187 22 194 30 194 L91 194 C94 194 97 191 96 187 C96 185 95 184 94 182 L24 106 C23 105 21 104 19 104 Z"/>
+  </g>
+</svg>
