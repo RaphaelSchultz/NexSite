@@ -841,7 +841,7 @@ export function SalesPage() {
               </button>
             </div>
           </div>
-          <div className="mx-auto mt-12 grid max-w-7xl gap-4 px-5 md:grid-cols-2 xl:grid-cols-5">
+          <div className="mx-auto mt-12 flex max-w-[1324px] flex-wrap justify-center gap-4 px-5">
             {plans.map((plan) => <PlanCard key={plan.id} plan={plan} billing={billing} onChoose={() => openGate(plan)} />)}
           </div>
           <div className="mx-auto mt-5 flex max-w-6xl flex-col gap-3 rounded-[10px] border border-[#e6e9ef] bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
@@ -963,9 +963,9 @@ export function SalesPage() {
       <footer className="border-t border-[#ebedf2] bg-white py-12">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 md:grid-cols-4">
           <div><SalesBrand /><p className="mt-4 max-w-[270px] text-sm leading-7 text-[#748094]">NFS-e em lote para afiliados Shopee que querem emitir com menos retrabalho e mais controle.</p></div>
-          <FooterCol title="Produto" items={["Produto", "Recursos", "Preços", "Como funciona", "FAQ", "Ajuda"]} />
-          <FooterCol title="Empresa" items={["Disponibilidade"]} />
-          <FooterCol title="Legal" items={["Status"]} />
+          <FooterCol title="Soluções" items={["Produto", "Recursos", "Preços"]} />
+          <FooterCol title="Empresa" items={["Disponibilidade", "Como Funciona", "Calculadora de Economia", "Central de Ajuda"]} />
+          <FooterCol title="Legal" items={["Termos de Uso", "Política de Privacidade", "Conformidade LGPD", "Status"]} />
         </div>
         <div className="mx-auto mt-10 flex max-w-6xl flex-wrap justify-between gap-4 border-t border-[#ebedf2] px-5 pt-5 text-xs text-[#929aaa]">
           <span>Lista de municípios habilitados disponibilizada por <a className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline" href="https://notaguard.com.br/guias/municipios-habilitados-nfse-nacional" target="_blank" rel="noreferrer">notaguard.com.br</a>.</span>
@@ -1462,7 +1462,7 @@ function PlanCard({ plan, billing, onChoose }: { plan: Plan; billing: Billing; o
   const isFree = plan.price === 0;
   const rows = planFeatureRows(plan);
   return (
-    <article className={cn("relative flex min-h-[660px] flex-col rounded-[18px] border bg-white p-6 transition-shadow hover:shadow-[0_18px_44px_rgba(6,23,71,.075)]", plan.featured ? "border-[#4f56f6] shadow-[0_18px_44px_rgba(79,86,246,.12)]" : "border-[#eaecf2]")}>
+    <article className={cn("relative flex min-h-[660px] w-[248px] flex-col rounded-[18px] border bg-white p-6 transition-shadow hover:shadow-[0_18px_44px_rgba(6,23,71,.075)]", plan.featured ? "border-[#4f56f6] shadow-[0_18px_44px_rgba(79,86,246,.12)]" : "border-[#eaecf2]")}>
       {plan.featured ? <span className="absolute -top-3 left-4 rounded-full bg-[#4f56f6] px-3 py-1 text-[10px] font-semibold text-white">Melhor escolha</span> : null}
       <h3 className="font-heading text-[16.5px] font-semibold text-[#1c2a4a]">{plan.name}</h3>
       <p className="mt-2 min-h-12 text-[13px] leading-5 text-[#7a8496]">{plan.description}</p>
@@ -1521,9 +1521,15 @@ const footerLinks: Record<string, string> = {
   Recursos: "/#beneficios",
   Preços: "/#planos",
   "Como funciona": "/#como-funciona",
+  "Como Funciona": "/#produto",
+  "Calculadora de Economia": "/#simulador",
+  "Central de Ajuda": "/ajuda",
   FAQ: "/#faq",
   Ajuda: "/ajuda",
   Disponibilidade: "/#cobertura",
+  "Termos de Uso": "/termos",
+  "Política de Privacidade": "/privacidade",
+  "Conformidade LGPD": "/lgpd",
   Status: "https://status.nexnotas.com.br",
 };
 
