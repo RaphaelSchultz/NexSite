@@ -73,7 +73,7 @@ type FiscalErrorDetail = {
 };
 
 const appUrl = "https://app.nexnotas.com.br/entrar";
-const affiliateUrl = "https://app.cakto.com.br/affiliate/invite/9fe53033-1bb2-4355-8dc8-a9ce97ef1e5d";
+const affiliateUrl = "https://nexnotas.com.br/indicacoes";
 
 const categoryIcons: Record<HelpCategory, LucideIcon> = {
   "Primeiros passos": Building2,

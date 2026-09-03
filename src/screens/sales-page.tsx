@@ -144,15 +144,15 @@ const plans: Plan[] = [
 const checkoutLinks: Record<Billing, Partial<Record<Plan["id"], string>>> = {
   monthly: {
     basic: "https://pay.nexnotas.com.br/p/BASIC_MONTHLY_V1",
-    profissional: "https://pay.cakto.com.br/cf3meo4_1065161",
-    "afiliado-expert": "https://pay.cakto.com.br/tcpmmke",
-    "top-afiliado": "https://pay.cakto.com.br/3eimpt6",
+    profissional: "https://pay.nexnotas.com.br/p/PROFESSIONAL_MONTHLY_V1",
+    "afiliado-expert": "https://pay.nexnotas.com.br/p/EXPERT_MONTHLY_V1",
+    "top-afiliado": "https://pay.nexnotas.com.br/p/TOP_MONTHLY_V1",
   },
   annual: {
     basic: "https://pay.nexnotas.com.br/p/BASIC_ANNUAL_V1",
-    profissional: "https://pay.cakto.com.br/35s9hgg",
-    "afiliado-expert": "https://pay.cakto.com.br/e9hmaog",
-    "top-afiliado": "https://pay.cakto.com.br/dics7w7",
+    profissional: "https://pay.nexnotas.com.br/p/PROFESSIONAL_ANNUAL_V1",
+    "afiliado-expert": "https://pay.nexnotas.com.br/p/EXPERT_ANNUAL_V1",
+    "top-afiliado": "https://pay.nexnotas.com.br/p/TOP_ANNUAL_V1",
   },
 };
 
@@ -968,7 +968,7 @@ export function SalesPage() {
           <FooterCol title="Legal" items={["Termos de Uso", "Política de Privacidade", "Conformidade LGPD", "Status"]} />
         </div>
         <div className="mx-auto mt-10 flex max-w-6xl flex-wrap justify-between gap-4 border-t border-[#ebedf2] px-5 pt-5 text-xs text-[#929aaa]">
-          <span>Lista de municípios habilitados disponibilizada por <a className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline" href="https://notaguard.com.br/guias/municipios-habilitados-nfse-nacional" target="_blank" rel="noreferrer">notaguard.com.br</a>.</span>
+          <span>Lista de municípios habilitados consolidada pela Nex Notas.</span>
           <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"
@@ -1074,7 +1074,7 @@ export function SalesPage() {
           </div>
           <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <Button variant="outline" className="rounded-[10px] border-[#dfe3ff] text-[#344054] hover:bg-[#f7f8ff]" onClick={() => setLaunchNotice(false)}>Entendi</Button>
-            <a href="https://chat.whatsapp.com/HNjJNOrxPj5Ha050P1JMuw" target="_blank" rel="noreferrer">
+            <a href="https://nexnotas.com.br/comunidade" target="_blank" rel="noreferrer">
               <Button className="w-full rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0] sm:w-auto">Entrar no grupo</Button>
             </a>
           </div>
@@ -1148,9 +1148,9 @@ export function SalesPage() {
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#667085]">Usamos cookies para melhorar sua experiência, analisar tráfego e personalizar conteúdo.</p>
             <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-[#667085]">
               Ao continuar usando o Nex Notas, você concorda com nossa{" "}
-              <a className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline" href="https://www.rhetz.com/privacy" target="_blank" rel="noreferrer">Política de Privacidade</a>{" "}
+              <a className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline" href="https://nexnotas.com.br/privacidade" target="_blank" rel="noreferrer">Política de Privacidade</a>{" "}
               e nossos{" "}
-              <a className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline" href="https://www.rhetz.com/terms" target="_blank" rel="noreferrer">Termos de Uso</a>.
+              <a className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline" href="https://nexnotas.com.br/termos" target="_blank" rel="noreferrer">Termos de Uso</a>.
             </p>
             <div className="mt-5 flex justify-center">
               <Button className="min-w-[170px] rounded-[10px] bg-[#4f56f6] text-white hover:bg-[#454cf0]" onClick={() => updateCookiePreferences(allCookiePreferences)}>Aceitar todos</Button>
