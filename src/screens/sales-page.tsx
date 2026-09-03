@@ -1489,7 +1489,7 @@ type PlanFeatureRowProps = {
 function planFeatureRows(plan: Plan): PlanFeatureRowProps[] {
   const paid = plan.price > 0;
   return [
-    { label: "Notas fiscais por mês", value: plan.unlimitedInvoices ? "Ilimitadas" : number.format(plan.invoices), available: true },
+    { label: "Notas por mês", value: plan.unlimitedInvoices ? "Ilimitadas" : number.format(plan.invoices), available: true },
     { label: "Empresas cadastradas", value: number.format(plan.companies), available: true },
     { label: "Notas avulsas e lotes Shopee", available: true },
     { label: "XML e DANFSe", available: true },
