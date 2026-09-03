@@ -75,6 +75,15 @@ const pages = {
         ],
       },
       {
+        title: "Responsabilidades das Partes",
+        paragraphs: [
+          "O Nex Notas é responsável por manter a plataforma, os recursos contratados, os controles de segurança sob sua gestão e o tratamento de dados que realizar como controlador ou operador, nos limites da lei e destes Termos.",
+          "O usuário, a conta contratante e a empresa cadastrada são responsáveis pelas informações, arquivos, instruções, credenciais, permissões, certificados, configurações fiscais, decisões de emissão e obrigações legais, fiscais, contábeis e tributárias que estejam sob sua esfera de controle.",
+          "O Nex Notas não se responsabiliza por prejuízos decorrentes de dados incorretos, incompletos ou desatualizados fornecidos pelo usuário; uso de certificado sem autorização; emissão solicitada em desacordo com a operação real; classificação fiscal, regime tributário, alíquota, retenção, CNAE, município ou natureza de serviço informados incorretamente; falhas de conexão, indisponibilidade ou rejeições de órgãos públicos, prefeituras, SEFIN, provedores municipais, gateways, serviços de e-mail, serviços de pagamento ou demais terceiros; nem por decisões fiscais ou contábeis tomadas sem orientação profissional.",
+          "Essa divisão não exclui responsabilidades que não possam ser afastadas pela legislação aplicável. Caso exista falha comprovadamente atribuível ao Nex Notas, a responsabilidade será analisada conforme a participação de cada parte, o nexo causal, os limites legais e as condições contratadas.",
+        ],
+      },
+      {
         title: "Certificado Digital e Emissão Fiscal",
         paragraphs: [
           "Quando o usuário envia um certificado digital A1, declara que possui autorização legítima para utilizá-lo em nome da empresa correspondente. O certificado e sua senha são utilizados para viabilizar funcionalidades fiscais, incluindo assinatura, transmissão, consulta, cancelamento ou processamento de documentos fiscais.",
@@ -136,6 +145,7 @@ const pages = {
         title: "Limitação de Responsabilidade",
         paragraphs: [
           "Na máxima extensão permitida pela legislação aplicável, o Nex Notas não será responsável por prejuízos decorrentes de informações incorretas fornecidas pelo usuário, decisões fiscais ou contábeis tomadas sem orientação profissional, indisponibilidade de terceiros, falhas de prefeituras ou serviços públicos, mau uso da plataforma, compartilhamento indevido de credenciais, certificado digital inválido, rejeições fiscais ou obrigações legais do próprio usuário.",
+          "Nenhuma disposição destes Termos limita ou exclui responsabilidade por condutas que, por lei, não possam ser limitadas ou excluídas. A plataforma não assume responsabilidade por resultado fiscal específico, deferimento por prefeitura, aceitação por sistema público, disponibilidade contínua de terceiros ou correção de dados que não tenham sido fornecidos, validados ou definidos pelo Nex Notas.",
         ],
       },
       {
@@ -272,6 +282,15 @@ const pages = {
         ],
       },
       {
+        title: "Responsabilidades no Tratamento",
+        paragraphs: [
+          "O Nex Notas é responsável por tratar dados pessoais de acordo com as finalidades informadas, adotar medidas de segurança proporcionais ao serviço, controlar acessos sob sua gestão, manter registros necessários e atender solicitações de titulares dentro dos limites técnicos, legais e contratuais aplicáveis.",
+          "O cliente é responsável por garantir que possui base legal, autorização e legitimidade para inserir, importar ou instruir o tratamento de dados de empresas, tomadores, vendedores, destinatários, membros de equipe e demais terceiros na plataforma. Também cabe ao cliente conferir a necessidade, exatidão, atualização e pertinência dos dados enviados.",
+          "Quando o Nex Notas tratar dados em nome do cliente para importação, emissão fiscal, armazenamento de documentos, envio de XML ou DANFSe e suporte operacional, o cliente permanece responsável pelas instruções dadas, pela origem lícita dos dados e pela adequação fiscal da operação.",
+          "O Nex Notas não se responsabiliza por danos causados exclusivamente por informação incorreta, excessiva ou ilícita enviada pelo cliente; instrução incompatível com a lei; uso não autorizado de certificado; compartilhamento indevido de credenciais; ação de usuário autorizado da conta; ou falha de terceiros e órgãos públicos fora de sua esfera de controle. Essa previsão não afasta responsabilidades legais do Nex Notas quando houver violação atribuível à própria plataforma.",
+        ],
+      },
+      {
         title: "Armazenamento e Segurança",
         paragraphs: [
           "O Nex Notas adota medidas técnicas e organizacionais para proteger dados pessoais, incluindo criptografia, controles de acesso, logs, segregação de ambientes, proteção de credenciais, autenticação multifator, armazenamento privado de arquivos fiscais e uso de hashes quando adequado.",
@@ -326,6 +345,15 @@ const pages = {
           "Dependendo do contexto, o Nex Notas pode atuar como controlador ou operador de dados pessoais.",
           "Em geral, o Nex Notas poderá atuar como controlador dos dados necessários para cadastro, autenticação, cobrança, segurança, suporte, analytics, relacionamento com usuários e administração da plataforma.",
           "Em determinadas operações fiscais realizadas em nome do usuário ou da empresa cadastrada, o Nex Notas poderá atuar como operador, tratando dados conforme instruções do cliente para viabilizar importações, emissão fiscal, armazenamento de arquivos, envio de documentos e suporte operacional.",
+        ],
+      },
+      {
+        title: "Divisão de Responsabilidades",
+        paragraphs: [
+          "Como controlador, o Nex Notas define finalidades e meios de tratamento ligados à conta, segurança, cobrança, suporte, comunicações, melhoria da plataforma e administração do serviço, respondendo pelos tratamentos que realizar nessa condição.",
+          "Como operador, o Nex Notas executa tratamentos em nome do cliente para finalidades como importação de relatórios, preparação de dados fiscais, emissão de NFS-e, armazenamento de documentos, envio de arquivos fiscais e suporte operacional. Nesses casos, o cliente é responsável pelas instruções, pela origem lícita dos dados, pela base legal aplicável e pela conferência das informações antes da emissão.",
+          "O Nex Notas não responde por fatos exclusivamente atribuíveis ao cliente, a usuários autorizados, a dados fornecidos de forma incorreta ou ilícita, a certificados usados sem autorização, a escolhas fiscais ou contábeis do cliente, nem por indisponibilidades, rejeições, exigências ou decisões de órgãos públicos, prefeituras, provedores fiscais, instituições financeiras, serviços de e-mail, ferramentas de autenticação ou demais terceiros fora de seu controle.",
+          "A limitação acima não afasta responsabilidades legais quando houver falha, tratamento irregular, deficiência de segurança ou violação atribuível ao Nex Notas. A análise de responsabilidade deve considerar a função exercida no tratamento, a participação de cada parte, o nexo causal, as medidas de segurança adotadas e as exceções previstas em lei.",
         ],
       },
       {
