@@ -841,7 +841,7 @@ export function SalesPage() {
               </button>
             </div>
           </div>
-          <div className="mx-auto mt-12 flex max-w-[1324px] flex-wrap justify-center gap-4 px-5">
+          <div className="mx-auto mt-12 flex max-w-[1360px] flex-wrap justify-center gap-4 px-5">
             {plans.map((plan) => <PlanCard key={plan.id} plan={plan} billing={billing} onChoose={() => openGate(plan)} />)}
           </div>
           <div className="mx-auto mt-5 flex max-w-6xl flex-col gap-3 rounded-[10px] border border-[#e6e9ef] bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
@@ -1462,7 +1462,7 @@ function PlanCard({ plan, billing, onChoose }: { plan: Plan; billing: Billing; o
   const isFree = plan.price === 0;
   const rows = planFeatureRows(plan);
   return (
-    <article className={cn("relative flex min-h-[660px] w-[248px] flex-col rounded-[18px] border bg-white p-6 transition-shadow hover:shadow-[0_18px_44px_rgba(6,23,71,.075)]", plan.featured ? "border-[#4f56f6] shadow-[0_18px_44px_rgba(79,86,246,.12)]" : "border-[#eaecf2]")}>
+    <article className={cn("relative flex min-h-[660px] w-[248px] shrink-0 flex-col rounded-[18px] border bg-white p-6 transition-shadow hover:shadow-[0_18px_44px_rgba(6,23,71,.075)]", plan.featured ? "border-[#4f56f6] shadow-[0_18px_44px_rgba(79,86,246,.12)]" : "border-[#eaecf2]")}>
       {plan.featured ? <span className="absolute -top-3 left-4 rounded-full bg-[#4f56f6] px-3 py-1 text-[10px] font-semibold text-white">Melhor escolha</span> : null}
       <h3 className="font-heading text-[16.5px] font-semibold text-[#1c2a4a]">{plan.name}</h3>
       <p className="mt-2 min-h-12 text-[13px] leading-5 text-[#7a8496]">{plan.description}</p>
