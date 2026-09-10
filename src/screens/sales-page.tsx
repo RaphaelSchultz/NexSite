@@ -141,24 +141,8 @@ const plans: Plan[] = [
   },
 ];
 
-const checkoutLinks: Record<Billing, Partial<Record<Plan["id"], string>>> = {
-  monthly: {
-    basic: "https://pay.nexnotas.com.br/p/BASIC_MONTHLY_V1",
-    profissional: "https://pay.nexnotas.com.br/p/PROFESSIONAL_MONTHLY_V1",
-    "afiliado-expert": "https://pay.nexnotas.com.br/p/EXPERT_MONTHLY_V1",
-    "top-afiliado": "https://pay.nexnotas.com.br/p/TOP_MONTHLY_V1",
-  },
-  annual: {
-    basic: "https://pay.nexnotas.com.br/p/BASIC_ANNUAL_V1",
-    profissional: "https://pay.nexnotas.com.br/p/PROFESSIONAL_ANNUAL_V1",
-    "afiliado-expert": "https://pay.nexnotas.com.br/p/EXPERT_ANNUAL_V1",
-    "top-afiliado": "https://pay.nexnotas.com.br/p/TOP_ANNUAL_V1",
-  },
-};
+const signupUrl = "https://app.nexnotas.com.br/criar-conta";
 
-function checkoutUrlFor(plan: Plan, billing: Billing) {
-  return checkoutLinks[billing][plan.id];
-}
 
 const coverage: CityCoverage[] = [
   { city: "Aracruz", uf: "ES", ibge: "3200607", status: "available", note: "Cidade liberada para você começar a emitir em lote." },
@@ -351,7 +335,6 @@ function parseCsvSimulation(text: string, source: string): SimulationResult {
 
 export function SalesPage() {
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
-  const [launchNotice, setLaunchNotice] = useState(false);
   const [cookiePreferences, setCookiePreferences] = useState<CookiePreferences | null>(() => readCookiePreferences());
   const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
   const [cookieDraft, setCookieDraft] = useState<CookiePreferences>(allCookiePreferences);
@@ -1050,35 +1033,16 @@ export function SalesPage() {
                     <div className="flex justify-between gap-4"><dt className="text-[#667085]">Porte</dt><dd className="font-semibold">{kind === "mei" ? "MEI" : "ME / Outros"}</dd></div>
                     <div className="flex justify-between gap-4"><dt className="text-[#667085]">Município</dt><dd className="font-semibold">{selectedCity ? `${selectedCity.city} / ${selectedCity.uf}` : "-"}</dd></div>
                   </dl>
-                  <p className="text-sm leading-6 text-[#667085]">Ao continuar, você segue para finalizar a assinatura com segurança.</p>
+                  <p className="text-sm leading-6 text-[#667085]">Ao continuar, você segue para criar sua conta com segurança.</p>
                   <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
                     <Button variant="outline" className="gap-2" onClick={() => setStep(2)}><ChevronLeft className="h-4 w-4" />Voltar</Button>
-                    <CheckoutAction plan={selectedPlan} kind={kind} city={selectedCity} billing={billing} onLaunchNotice={() => setLaunchNotice(true)} />
+                    <CheckoutAction plan={selectedPlan} kind={kind} city={selectedCity} />
                   </div>
                 </>
               ) : null}
             </div>
           </DialogContent>
         ) : null}
-      </Dialog>
-
-      <Dialog open={launchNotice} onOpenChange={setLaunchNotice}>
-        <DialogContent className="nex-sales-dialog max-w-md rounded-[14px] bg-white text-[#061747]">
-          <DialogHeader>
-            <DialogTitle>Estamos preparando seu acesso</DialogTitle>
-            <DialogDescription>Em breve será possível criar sua conta e usar a Nex Notas diretamente pelo sistema.</DialogDescription>
-          </DialogHeader>
-          <div className="mt-5 rounded-[12px] border border-[#dfe3ff] bg-[#f7f8ff] p-4">
-            <strong className="block text-sm text-[#061747]">Entre no grupo de lançamento oficial da Nex Notas.</strong>
-            <p className="mt-1 text-sm leading-6 text-[#667085]">Lançaremos com desconto especial para quem estiver no grupo. Assim que a contratação for liberada, você recebe o aviso em primeira mão.</p>
-          </div>
-          <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-            <Button variant="outline" className="rounded-[10px] border-[#dfe3ff] text-[#344054] hover:bg-[#f7f8ff]" onClick={() => setLaunchNotice(false)}>Entendi</Button>
-            <a href="https://nexnotas.com.br/comunidade" target="_blank" rel="noreferrer">
-              <Button className="w-full rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0] sm:w-auto">Entrar no grupo</Button>
-            </a>
-          </div>
-        </DialogContent>
       </Dialog>
 
       <Dialog open={cookieSettingsOpen} onOpenChange={setCookieSettingsOpen}>
@@ -1607,10 +1571,9 @@ function CoverageStep({ icon: Icon, title, text }: { icon: LucideIcon; title: st
   );
 }
 
-function CheckoutAction({ plan, kind, city, billing, onLaunchNotice }: { plan: Plan; kind: CompanyKind; city: CityCoverage | null; billing: Billing; onLaunchNotice: () => void }) {
+function CheckoutAction({ plan, kind, city }: { plan: Plan; kind: CompanyKind; city: CityCoverage | null }) {
   const [joinedWaitlist, setJoinedWaitlist] = useState(false);
   const available = cityIsAvailable(city, kind);
-  const checkoutUrl = checkoutUrlFor(plan, billing);
   if (!city) return <Button disabled>Selecione uma cidade</Button>;
   if (!available) {
     if (joinedWaitlist) {
@@ -1646,14 +1609,10 @@ function CheckoutAction({ plan, kind, city, billing, onLaunchNotice }: { plan: P
     <Button
       className="gap-2"
       onClick={() => {
-        if (checkoutUrl) {
-          window.location.href = checkoutUrl;
-          return;
-        }
-        onLaunchNotice();
+        window.location.href = signupUrl;
       }}
     >
-      {plan.price === 0 ? "Criar conta" : "Ir para o pagamento"} <ArrowRight className="h-4 w-4" />
+      Criar conta <ArrowRight className="h-4 w-4" />
     </Button>
   );
 }
