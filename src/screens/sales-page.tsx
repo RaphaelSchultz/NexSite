@@ -23,6 +23,7 @@ import {
   ShieldCheck,
   Sparkles,
   Sun,
+  TriangleAlert,
   UploadCloud,
   Users,
   XCircle,
@@ -686,7 +687,7 @@ export function SalesPage() {
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[.12em] text-white/55">Status atual</p>
                       <strong className="mt-1 block font-heading text-xl text-white">Disponível para MEI</strong>
-                      <p className="mt-2 text-sm leading-6 text-white/65">Para outros portes, a cidade entra na prioridade de expansão antes da contratação.</p>
+                      <p className="mt-2 text-sm leading-6 text-white/65">Para outros portes, a cobertura depende da integração municipal ou da homologação incluída nos planos elegíveis.</p>
                     </div>
                   </div>
                 </div>
@@ -697,7 +698,7 @@ export function SalesPage() {
                 </div>
               </div>
               <div className="mt-5 rounded-[16px] border border-[#4f56f6]/35 bg-[#4f56f6]/10 p-4">
-                <p className="text-sm leading-6 text-white/75">Contrate com clareza: cidade atendida segue para o plano; cidade indisponível entra na prioridade.</p>
+                <p className="text-sm leading-6 text-white/75">Contrate com clareza: cidade atendida segue normalmente; Expert e Top também incluem homologação municipal.</p>
               </div>
             </div>
             <div>
@@ -706,10 +707,10 @@ export function SalesPage() {
                 Confira a cidade antes de escolher o plano.
               </h2>
               <p className="mt-4 max-w-[620px] text-base leading-[1.75] text-white/70">
-                Antes do pagamento, a Nex Notas confirma se sua operação já pode seguir. Se estiver liberado, você continua para contratar.
+                Antes do pagamento, a Nex Notas confirma se sua operação já pode seguir ou se a homologação municipal está incluída no plano escolhido.
               </p>
               <div className="mt-8 grid gap-3 text-sm text-white/78">
-                {["MEI segue pelo padrão nacional.", "Empresas passam pela checagem municipal.", "Cidades indisponíveis entram na prioridade."].map((text) => (
+                {["MEI segue pelo padrão nacional.", "Empresas passam pela checagem municipal.", "Expert e Top incluem homologação municipal."].map((text) => (
                   <div key={text} className="flex items-center gap-3 rounded-[12px] border border-white/10 bg-white/[.045] px-4 py-3">
                     <Check className="h-4 w-4 text-[#aeb6ff]" />
                     <span>{text}</span>
@@ -919,7 +920,7 @@ export function SalesPage() {
                           {matchingCities.length ? matchingCities.map((city) => (
                             <button key={`${city.city}-${city.uf}`} className={cn("flex w-full items-center justify-between gap-3 border-b border-[#eaecf0] px-3 py-3 text-left last:border-b-0 hover:bg-[#fbfcfe]", selectedCity?.city === city.city && selectedCity.uf === city.uf && "bg-[#f4f5ff]")} onClick={() => { setSelectedCity(city); setCityQuery(`${city.city} / ${city.uf}`); setEditingCity(false); }}>
                               <span className="min-w-0"><strong className="block truncate text-sm">{city.city}</strong><span className="text-xs font-semibold text-[#98a2b3]">{city.uf}</span></span>
-                              <CoverageBadge city={city} kind={kind} />
+                              <CoverageBadge city={city} kind={kind} plan={selectedPlan} />
                             </button>
                           )) : <div className="p-4 text-sm text-[#667085]">Cidade não encontrada. Você pode entrar na lista de espera.</div>}
                         </div>
@@ -931,7 +932,7 @@ export function SalesPage() {
                       </div>
                     )}
                   </div>
-                  {selectedCity ? <CoveragePanel kind={kind} selectedCity={selectedCity} compact /> : null}
+                  {selectedCity ? <CoveragePanel kind={kind} selectedCity={selectedCity} plan={selectedPlan} compact /> : null}
                   <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
                     <Button variant="outline" className="gap-2" onClick={() => { setKind(null); setStep(1); }}><ChevronLeft className="h-4 w-4" />Voltar</Button>
                     <Button disabled={!selectedCity} onClick={() => setStep(3)}>Continuar</Button>
@@ -948,6 +949,7 @@ export function SalesPage() {
                     <div className="flex justify-between gap-4"><dt className="text-[#667085]">Periodicidade</dt><dd className="font-semibold">{billing === "annual" ? "Anual" : "Mensal"}</dd></div>
                     <div className="flex justify-between gap-4"><dt className="text-[#667085]">Porte</dt><dd className="font-semibold">{kind === "mei" ? "MEI" : "ME / Outros"}</dd></div>
                     <div className="flex justify-between gap-4"><dt className="text-[#667085]">Município</dt><dd className="font-semibold">{selectedCity ? `${selectedCity.city} / ${selectedCity.uf}` : "-"}</dd></div>
+                    {selectedCity && kind === "empresa" && !cityIsAvailable(selectedCity, kind) && planIncludesMunicipalityHomologation(selectedPlan) ? <div className="flex justify-between gap-4"><dt className="text-[#667085]">Homologação municipal</dt><dd className="font-semibold text-[#16803c]">Incluída no plano</dd></div> : null}
                   </dl>
                   <p className="text-sm leading-6 text-[#667085]">Ao continuar, você segue para criar sua conta com segurança.</p>
                   <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
@@ -1313,21 +1315,47 @@ function cityIsAvailable(city: CityCoverage | null, kind: CompanyKind) {
   return city.status === "available";
 }
 
+function planIncludesMunicipalityHomologation(plan: Plan) {
+  return plan.id === "afiliado-expert" || plan.id === "top-afiliado";
+}
+
 function cityMessage(city: CityCoverage | null, kind: CompanyKind) {
   if (!city) return "Digite e selecione o município para continuar.";
   if (kind === "mei") return "Para MEI, a emissão pode seguir pelo padrão nacional.";
   return city.note;
 }
 
-function CoverageBadge({ city, kind }: { city: CityCoverage; kind: CompanyKind }) {
+function CoverageBadge({ city, kind, plan }: { city: CityCoverage; kind: CompanyKind; plan: Plan }) {
   const available = cityIsAvailable(city, kind);
   if (available) return <span className="rounded-full bg-[#ecfdf3] px-2 py-1 text-[11px] font-bold text-[#16803c]">Atendido</span>;
+  if (kind === "empresa" && planIncludesMunicipalityHomologation(plan)) return <span className="rounded-full bg-[#ecfdf3] px-2 py-1 text-[11px] font-bold text-[#16803c]">Homologação incluída</span>;
   if (city.status === "mei_only") return <span className="rounded-full bg-[#f4f5ff] px-2 py-1 text-[11px] font-bold text-[#4f56f6]">Somente MEI</span>;
   return <span className="rounded-full bg-[#f1f5f9] px-2 py-1 text-[11px] font-bold text-[#526073]">Lista de espera</span>;
 }
 
-function CoveragePanel({ kind, selectedCity, compact, dark = false }: { kind: CompanyKind; selectedCity: CityCoverage | null; compact: boolean; dark?: boolean }) {
+function CoveragePanel({ kind, selectedCity, plan, compact, dark = false }: { kind: CompanyKind; selectedCity: CityCoverage | null; plan: Plan; compact: boolean; dark?: boolean }) {
   const available = cityIsAvailable(selectedCity, kind);
+  const homologationIncluded = Boolean(selectedCity && kind === "empresa" && !available && planIncludesMunicipalityHomologation(plan));
+  if (selectedCity && homologationIncluded) {
+    return (
+      <div className={cn("rounded-[12px] border border-[#f1dfaa] bg-[#fffbef]", compact ? "p-4" : "p-5")}>
+        <div className="flex items-start gap-3">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-[#e59a14]"><TriangleAlert className="h-5 w-5" /></span>
+          <div>
+            <strong className="block text-sm text-[#20283a]">Em {selectedCity.city} / {selectedCity.uf}, o regime geral ainda precisa de homologação.</strong>
+            <p className="mt-1 text-sm leading-6 text-[#667085]">A cobertura nacional está disponível para MEI. Para os demais regimes, a conexão municipal ainda não está ativa.</p>
+          </div>
+        </div>
+        <div className="mt-4 flex items-start gap-3 rounded-[10px] border border-[#bfead3] bg-[#ecfbf3] p-4">
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#d4f5e3] text-[#16805a]"><ShieldCheck className="h-5 w-5" /></span>
+          <div>
+            <strong className="block text-sm text-[#16704f]">Coberto pelo plano {plan.name}</strong>
+            <p className="mt-1 text-sm leading-6 text-[#4f6b60]">Nossa equipe homologa a conexão com a prefeitura de {selectedCity.city} para o regime geral, sem custo adicional. Você pode seguir com a contratação normalmente.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
   const Icon = available ? BadgeCheck : XCircle;
   return (
     <div className={cn("rounded-[12px] border shadow-[0_10px_28px_rgba(6,23,71,.035)]", compact ? "p-4" : "p-5", dark ? "border-white/10 bg-white/[.06] text-white shadow-none" : "border-[#eaecf2] bg-white text-[#061747]")}>
@@ -1356,8 +1384,9 @@ function CoverageStep({ icon: Icon, title, text }: { icon: LucideIcon; title: st
 function CheckoutAction({ plan, kind, city }: { plan: Plan; kind: CompanyKind; city: CityCoverage | null }) {
   const [joinedWaitlist, setJoinedWaitlist] = useState(false);
   const available = cityIsAvailable(city, kind);
+  const homologationIncluded = kind === "empresa" && planIncludesMunicipalityHomologation(plan);
   if (!city) return <Button disabled>Selecione uma cidade</Button>;
-  if (!available) {
+  if (!available && !homologationIncluded) {
     if (joinedWaitlist) {
       return (
         <div className="rounded-[10px] border border-[#cdd2ff] bg-[#f4f5ff] px-4 py-3 text-right">

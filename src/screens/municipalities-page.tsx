@@ -336,10 +336,11 @@ export function MunicipalitiesPage() {
         <section className="bg-white px-5 py-20">
           <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-7 rounded-[18px] bg-[#4f56f6] p-8 text-center text-white sm:p-12 lg:flex-row lg:text-left">
             <div>
-              <h2 className="font-heading text-3xl font-semibold leading-tight text-white">Encontrou sua cidade?</h2>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-[#eef0ff]">Crie sua conta, envie o certificado A1 e comece a organizar a emissão das suas notas em lote.</p>
+              <span className="inline-flex rounded-full bg-white/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[.08em] text-white">Incluso a partir do Afiliado Expert</span>
+              <h2 className="mt-4 font-heading text-3xl font-semibold leading-tight text-white">Não encontrou sua cidade? Nós homologamos para você.</h2>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-[#eef0ff]">Nos planos Afiliado Expert e Top Afiliado, nossa equipe homologa a integração com a prefeitura para empresas do regime geral, sem custo adicional.</p>
             </div>
-            <a href="https://app.nexnotas.com.br/criar-conta" className="shrink-0"><Button size="lg" className="gap-2 rounded-[10px] bg-white text-[#4f56f6] hover:bg-[#f5f6ff]">Começar grátis <ArrowRight className="h-4 w-4" /></Button></a>
+            <a href="https://app.nexnotas.com.br/criar-conta" className="shrink-0"><Button size="lg" className="gap-2 rounded-[10px] bg-white text-[#4f56f6] hover:bg-[#f5f6ff]">Criar conta <ArrowRight className="h-4 w-4" /></Button></a>
           </div>
         </section>
       </main>
