@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { memo, useDeferredValue, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
   Building2,
@@ -62,22 +62,42 @@ const stateNames: Record<string, string> = {
 
 const collator = new Intl.Collator("pt-BR", { sensitivity: "base" });
 const numberFormatter = new Intl.NumberFormat("pt-BR");
+const searchResultLimit = 60;
+const stateBatchSize = 90;
 const apiUrl = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? "https://app.nexnotas.com.br/api/v1/referencias/municipios-atendidos?limite=6000"
   : "/api/municipios-atendidos";
+let coverageCache: CoverageResponse | null = null;
+let coverageRequest: Promise<CoverageResponse> | null = null;
 
 function normalize(value: string) {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-}
-
-function isAvailable(municipality: Municipality, regime: Regime) {
-  return regime === "mei" ? municipality.meiDisponivel : municipality.regimeGeralDisponivel;
 }
 
 function formatReferenceDate(value?: string) {
   if (!value) return "—";
   const [year, month, day] = value.slice(0, 10).split("-").map(Number);
   return new Intl.DateTimeFormat("pt-BR").format(new Date(year, month - 1, day));
+}
+
+function fetchCoverage() {
+  if (coverageCache) return Promise.resolve(coverageCache);
+  if (!coverageRequest) {
+    coverageRequest = fetch(apiUrl, { headers: { Accept: "application/json" } })
+      .then((response) => {
+        if (!response.ok) throw new Error("Não foi possível carregar a cobertura.");
+        return response.json() as Promise<CoverageResponse>;
+      })
+      .then((response) => {
+        coverageCache = response;
+        return response;
+      })
+      .catch((cause) => {
+        coverageRequest = null;
+        throw cause;
+      });
+  }
+  return coverageRequest;
 }
 
 export function MunicipalitiesPage() {
@@ -88,6 +108,10 @@ export function MunicipalitiesPage() {
   const [query, setQuery] = useState("");
   const [uf, setUf] = useState("");
   const [openStates, setOpenStates] = useState<Set<string>>(new Set());
+  const [visibleByState, setVisibleByState] = useState<Record<string, number>>({});
+  const deferredQuery = useDeferredValue(query);
+  const deferredUf = useDeferredValue(uf);
+  const filterPending = query !== deferredQuery || uf !== deferredUf;
 
   useLayoutEffect(() => {
     const root = document.documentElement;
@@ -114,13 +138,9 @@ export function MunicipalitiesPage() {
   }, []);
 
   const loadCoverage = () => {
-    setLoading(true);
+    setLoading(!coverageCache);
     setError(false);
-    fetch(apiUrl, { headers: { Accept: "application/json" } })
-      .then((response) => {
-        if (!response.ok) throw new Error("Não foi possível carregar a cobertura.");
-        return response.json() as Promise<CoverageResponse>;
-      })
+    fetchCoverage()
       .then((response) => setData(response))
       .catch(() => setError(true))
       .finally(() => setLoading(false));
@@ -128,23 +148,40 @@ export function MunicipalitiesPage() {
 
   useEffect(loadCoverage, []);
 
-  const availableMunicipalities = useMemo(() => {
-    if (!data) return [];
-    return data.municipios
-      .filter((municipality) => isAvailable(municipality, regime))
-      .sort((a, b) => collator.compare(a.nome, b.nome));
-  }, [data, regime]);
+  const municipalitiesByRegime = useMemo(() => {
+    const municipalities: Record<Regime, Municipality[]> = { geral: [], mei: [] };
+    for (const municipality of data?.municipios ?? []) {
+      if (municipality.regimeGeralDisponivel) municipalities.geral.push(municipality);
+      if (municipality.meiDisponivel) municipalities.mei.push(municipality);
+    }
+    municipalities.geral.sort((a, b) => collator.compare(a.nome, b.nome));
+    municipalities.mei.sort((a, b) => collator.compare(a.nome, b.nome));
+    return municipalities;
+  }, [data]);
+
+  const availableMunicipalities = municipalitiesByRegime[regime];
+
+  const municipalitySearchIndex = useMemo(() => {
+    const index = new Map<string, string>();
+    for (const municipality of data?.municipios ?? []) {
+      index.set(municipality.codigoIbge, normalize(`${municipality.nome} ${municipality.uf} ${municipality.codigoIbge}`));
+    }
+    return index;
+  }, [data]);
 
   const filteredMunicipalities = useMemo(() => {
-    const normalizedQuery = normalize(query.trim());
+    const normalizedQuery = normalize(deferredQuery.trim());
     return availableMunicipalities.filter((municipality) => {
-      if (uf && municipality.uf !== uf) return false;
+      if (deferredUf && municipality.uf !== deferredUf) return false;
       if (!normalizedQuery) return true;
-      return normalize(`${municipality.nome} ${municipality.uf} ${municipality.codigoIbge}`).includes(normalizedQuery);
+      return municipalitySearchIndex.get(municipality.codigoIbge)?.includes(normalizedQuery);
     });
-  }, [availableMunicipalities, query, uf]);
+  }, [availableMunicipalities, deferredQuery, deferredUf, municipalitySearchIndex]);
+
+  const searching = Boolean(deferredQuery.trim());
 
   const groupedMunicipalities = useMemo(() => {
+    if (searching) return [];
     const groups = new Map<string, Municipality[]>();
     for (const municipality of filteredMunicipalities) {
       const current = groups.get(municipality.uf) ?? [];
@@ -152,10 +189,9 @@ export function MunicipalitiesPage() {
       groups.set(municipality.uf, current);
     }
     return [...groups.entries()].sort(([a], [b]) => collator.compare(stateNames[a] ?? a, stateNames[b] ?? b));
-  }, [filteredMunicipalities]);
+  }, [filteredMunicipalities, searching]);
 
-  const searching = Boolean(query.trim());
-  const searchResults = searching ? filteredMunicipalities.slice(0, 120) : [];
+  const searchResults = searching ? filteredMunicipalities.slice(0, searchResultLimit) : [];
   const totalForRegime = regime === "mei"
     ? data?.meta.totalMeiDisponivel ?? 0
     : data?.meta.totalRegimeGeralDisponivel ?? 0;
@@ -223,19 +259,20 @@ export function MunicipalitiesPage() {
                 <p className="mt-2 max-w-xl text-sm leading-7 text-[#667085]">Escolha o tipo de empresa para ver a disponibilidade correta na sua cidade.</p>
               </div>
               <div className="inline-flex w-full rounded-[12px] border border-[#e1e5ef] bg-[#f7f8fc] p-1 sm:w-auto" aria-label="Tipo de empresa">
-                <RegimeButton active={regime === "geral"} onClick={() => setRegime("geral")} icon={Building2}>Empresas</RegimeButton>
-                <RegimeButton active={regime === "mei"} onClick={() => setRegime("mei")} icon={Store}>MEI</RegimeButton>
+                <RegimeButton active={regime === "geral"} onClick={() => { setRegime("geral"); setVisibleByState({}); }} icon={Building2}>Empresas</RegimeButton>
+                <RegimeButton active={regime === "mei"} onClick={() => { setRegime("mei"); setVisibleByState({}); }} icon={Store}>MEI</RegimeButton>
               </div>
             </div>
 
             <div className="rounded-[18px] border border-[#e2e6f0] bg-white p-4 shadow-[0_18px_50px_rgba(6,23,71,.055)] sm:p-5">
               <div className="grid gap-3 md:grid-cols-[1fr_230px]">
                 <label className="relative block">
-                  <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8a94a7]" />
+                  {filterPending ? <LoaderCircle className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-[#5961e9]" /> : <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8a94a7]" />}
                   <input
                     type="search"
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
+                    aria-busy={filterPending}
                     placeholder="Busque por cidade, UF ou código IBGE"
                     className="h-12 w-full rounded-[10px] border border-[#dfe3ec] bg-white pl-11 pr-4 text-sm text-[#26324b] outline-none transition placeholder:text-[#98a2b3] focus:border-[#7379f8] focus:ring-4 focus:ring-[#4f56f6]/10"
                   />
@@ -245,6 +282,7 @@ export function MunicipalitiesPage() {
                   onChange={(event) => {
                     const nextUf = event.target.value;
                     setUf(nextUf);
+                    setVisibleByState({});
                     if (nextUf) setOpenStates(new Set([nextUf]));
                   }}
                   className="h-12 rounded-[10px] border border-[#dfe3ec] bg-white px-4 text-sm text-[#344054] outline-none transition focus:border-[#7379f8] focus:ring-4 focus:ring-[#4f56f6]/10"
@@ -282,7 +320,7 @@ export function MunicipalitiesPage() {
               <div className="mt-8">
                 <div className="mb-4 flex items-center justify-between gap-4">
                   <p className="text-sm text-[#667085]"><strong className="text-[#243150]">{numberFormatter.format(filteredMunicipalities.length)}</strong> resultado(s) encontrado(s)</p>
-                  {filteredMunicipalities.length > 120 ? <span className="text-xs text-[#98a2b3]">Mostrando os primeiros 120</span> : null}
+                  {filteredMunicipalities.length > searchResultLimit ? <span className="text-xs text-[#98a2b3]">Mostrando os primeiros {searchResultLimit}</span> : null}
                 </div>
                 {searchResults.length ? (
                   <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -293,7 +331,9 @@ export function MunicipalitiesPage() {
             ) : (
               <div className="mt-8 space-y-3">
                 {groupedMunicipalities.map(([state, municipalities]) => {
-                  const open = openStates.has(state) || Boolean(uf);
+                  const open = openStates.has(state) || Boolean(deferredUf);
+                  const visibleCount = visibleByState[state] ?? stateBatchSize;
+                  const visibleMunicipalities = municipalities.slice(0, visibleCount);
                   return (
                     <div key={state} className="overflow-hidden rounded-[14px] border border-[#e2e6f0] bg-white">
                       <button type="button" onClick={() => toggleState(state)} className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition hover:bg-[#fafbff]" aria-expanded={open}>
@@ -304,8 +344,21 @@ export function MunicipalitiesPage() {
                         <ChevronDown className={`h-4 w-4 text-[#7d8798] transition ${open ? "rotate-180" : ""}`} />
                       </button>
                       {open ? (
-                        <div className="grid gap-2 border-t border-[#eef0f5] bg-[#fbfcff] p-4 sm:grid-cols-2 lg:grid-cols-3">
-                          {municipalities.map((municipality) => <MunicipalityCard key={municipality.codigoIbge} municipality={municipality} compact />)}
+                        <div className="border-t border-[#eef0f5] bg-[#fbfcff] p-4">
+                          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                            {visibleMunicipalities.map((municipality) => <MunicipalityCard key={municipality.codigoIbge} municipality={municipality} compact />)}
+                          </div>
+                          {visibleCount < municipalities.length ? (
+                            <div className="mt-4 flex justify-center">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setVisibleByState((current) => ({ ...current, [state]: visibleCount + stateBatchSize }))}
+                              >
+                                Mostrar mais municípios
+                              </Button>
+                            </div>
+                          ) : null}
                         </div>
                       ) : null}
                     </div>
@@ -373,14 +426,14 @@ function RegimeButton({ active, onClick, icon: Icon, children }: { active: boole
   return <button type="button" onClick={onClick} className={`flex flex-1 items-center justify-center gap-2 rounded-[8px] px-5 py-2.5 text-sm font-semibold transition sm:flex-none ${active ? "bg-white text-[#4f56f6] shadow-sm" : "text-[#667085] hover:text-[#344054]"}`}><Icon className="h-4 w-4" />{children}</button>;
 }
 
-function MunicipalityCard({ municipality, compact = false }: { municipality: Municipality; compact?: boolean }) {
+const MunicipalityCard = memo(function MunicipalityCard({ municipality, compact = false }: { municipality: Municipality; compact?: boolean }) {
   return (
-    <article className={`rounded-[11px] border border-[#e5e8f1] bg-white ${compact ? "p-3.5" : "p-4"}`}>
+    <article className={`[content-visibility:auto] [contain-intrinsic-size:76px] rounded-[11px] border border-[#e5e8f1] bg-white ${compact ? "p-3.5" : "p-4"}`}>
       <div className="flex items-start justify-between gap-3"><div><h3 className="font-semibold text-[#243150]">{municipality.nome}</h3><p className="mt-1 text-xs text-[#8a94a7]">{municipality.uf} · IBGE {municipality.codigoIbge}</p></div><span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#edf9f2] px-2 py-1 text-[10px] font-bold text-[#287a4d]"><Check className="h-3 w-3" /> Disponível</span></div>
       {!compact ? <p className="mt-4 text-xs font-medium text-[#667085]">{municipality.nfseNacional.emissorNacional ? "Emissor Nacional" : "Cobertura confirmada pela Nex Notas"}</p> : null}
     </article>
   );
-}
+});
 
 function InfoCard({ icon: Icon, title, text }: { icon: typeof Store; title: string; text: string }) {
   return <article className="rounded-[16px] border border-[#e1e5ef] bg-white p-5"><span className="grid h-10 w-10 place-items-center rounded-[11px] bg-[#eef0ff] text-[#4f56f6]"><Icon className="h-5 w-5" /></span><h3 className="mt-4 font-heading text-base font-semibold text-[#061747]">{title}</h3><p className="mt-2 text-sm leading-6 text-[#667085]">{text}</p></article>;
