@@ -209,7 +209,7 @@ export function MunicipalitiesPage() {
             <div className="mx-auto mt-10 grid max-w-4xl gap-3 text-left sm:grid-cols-3">
               <MetricCard icon={Store} label="Disponível para MEI" value={data ? numberFormatter.format(data.meta.totalMeiDisponivel) : "—"} detail="municípios" />
               <MetricCard icon={Building2} label="Regime geral" value={data ? numberFormatter.format(data.meta.totalRegimeGeralDisponivel) : "—"} detail="municípios" />
-              <MetricCard icon={CalendarDays} label="Dados atualizados" value={formatReferenceDate(data?.meta.dataReferenciaNacional)} detail="referência nacional" />
+              <MetricCard icon={CalendarDays} label="Dados atualizados" value={formatReferenceDate(data?.meta.dataReferenciaNacional)} detail="referência nacional" detailBelow />
             </div>
           </div>
         </section>
@@ -364,8 +364,8 @@ export function MunicipalitiesPage() {
   );
 }
 
-function MetricCard({ icon: Icon, label, value, detail }: { icon: typeof Store; label: string; value: string; detail: string }) {
-  return <div className="rounded-[16px] border border-[#e0e4f4] bg-white p-5 shadow-[0_12px_32px_rgba(6,23,71,.045)]"><div className="flex items-center gap-2 text-xs font-semibold text-[#667085]"><Icon className="h-4 w-4 text-[#5961e9]" />{label}</div><div className="mt-3 flex items-baseline gap-2"><strong className="font-heading text-2xl font-semibold text-[#061747]">{value}</strong><span className="text-xs text-[#98a2b3]">{detail}</span></div></div>;
+function MetricCard({ icon: Icon, label, value, detail, detailBelow = false }: { icon: typeof Store; label: string; value: string; detail: string; detailBelow?: boolean }) {
+  return <div className="rounded-[16px] border border-[#e0e4f4] bg-white p-5 shadow-[0_12px_32px_rgba(6,23,71,.045)]"><div className="flex items-center gap-2 text-xs font-semibold text-[#667085]"><Icon className="h-4 w-4 text-[#5961e9]" />{label}</div><div className={`mt-3 ${detailBelow ? "flex flex-col items-start gap-1" : "flex items-baseline gap-2"}`}><strong className="font-heading text-2xl font-semibold text-[#061747]">{value}</strong><span className="whitespace-nowrap text-xs text-[#98a2b3]">{detail}</span></div></div>;
 }
 
 function RegimeButton({ active, onClick, icon: Icon, children }: { active: boolean; onClick: () => void; icon: typeof Store; children: string }) {
