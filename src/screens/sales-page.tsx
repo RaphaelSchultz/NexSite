@@ -29,9 +29,9 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
+import { openCookiePreferences } from "../components/cookie-consent";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../components/ui/dialog";
 import { Input } from "../components/ui/input";
-import { updateMarketingConsent, type MarketingPixelConsent } from "../lib/marketing-pixels";
 import { cn } from "../lib/utils";
 
 type CompanyKind = "mei" | "empresa";
@@ -46,25 +46,20 @@ type CityCoverage = {
   note: string;
 };
 
-type PublicCoverageCity = {
-  codibge: string;
-  cidade: string;
-  UF: string;
-  atende: boolean;
-};
-
-type NotaGuardCoverageCity = {
-  ibge: number | string;
+type NexCoverageCity = {
+  codigoIbge: string;
   nome: string;
   uf: string;
-  emissorNacional: boolean;
+  meiDisponivel: boolean;
+  regimeGeralDisponivel: boolean;
+  motivoRegimeGeralIndisponivel?: {
+    mensagem?: string;
+  } | null;
 };
 
-type NotaGuardCoverageResponse = {
-  municipios?: NotaGuardCoverageCity[];
+type NexCoverageResponse = {
+  municipios?: NexCoverageCity[];
 };
-
-type CookiePreferences = MarketingPixelConsent;
 
 type Plan = {
   id: string;
@@ -142,89 +137,28 @@ const plans: Plan[] = [
 ];
 
 const signupUrl = "https://app.nexnotas.com.br/criar-conta";
-
-
-const coverage: CityCoverage[] = [
-  { city: "Aracruz", uf: "ES", ibge: "3200607", status: "available", note: "Cidade liberada para você começar a emitir em lote." },
-  { city: "São Paulo", uf: "SP", ibge: "3550308", status: "available", note: "Cidade liberada para começar com a Nex Notas." },
-  { city: "Rio de Janeiro", uf: "RJ", ibge: "3304557", status: "available", note: "Cidade liberada para emissão em lote." },
-  { city: "Belo Horizonte", uf: "MG", ibge: "3106200", status: "available", note: "Cidade liberada para iniciar sua operação." },
-  { city: "Curitiba", uf: "PR", ibge: "4106902", status: "available", note: "Cidade liberada para emissão e organização das notas." },
-  { city: "Porto Alegre", uf: "RS", ibge: "4314902", status: "available", note: "Cidade pronta para transformar relatório em notas." },
-  { city: "Florianópolis", uf: "SC", ibge: "4205407", status: "available", note: "Cidade liberada para emissão em lote." },
-  { city: "Salvador", uf: "BA", ibge: "2927408", status: "mei_only", note: "Liberado para MEI. Outros portes entram na fila de prioridade." },
-  { city: "Vila Velha", uf: "ES", ibge: "3205200", status: "mei_only", note: "Liberado para MEI. Outros portes entram na fila de prioridade." },
-  { city: "Fortaleza", uf: "CE", ibge: "2304400", status: "mei_only", note: "Liberado para MEI. Outros portes entram na fila de prioridade." },
-  { city: "Recife", uf: "PE", ibge: "2611606", status: "waitlist", note: "Ainda não liberamos sua cidade. Entre na lista para priorizarmos sua região." },
-  { city: "Goiânia", uf: "GO", ibge: "5208707", status: "waitlist", note: "Ainda não liberamos sua cidade. Entre na lista para priorizarmos sua região." },
-  { city: "Manaus", uf: "AM", ibge: "1302603", status: "waitlist", note: "Sua cidade está na fila de expansão da Nex Notas." },
-];
+const coverageApiUrl = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+  ? "https://app.nexnotas.com.br/api/v1/referencias/municipios-atendidos?limite=6000"
+  : "/api/municipios-atendidos";
 
 const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 const normalizeSearch = (value: string) => normalize(value).replace(/[^a-z0-9]+/g, " ").trim();
 const currency = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
 const currencyWithCents = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const number = new Intl.NumberFormat("pt-BR");
-const nationalEmitterCities = new Set(coverage.filter((city) => city.status === "available").map((city) => cityKey(city.city, city.uf)));
-const cookieStorageKey = "nexnotas_tracking_consent";
-const allCookiePreferences: CookiePreferences = { analytics: true, marketing: true, experience: true };
-const noOptionalCookiePreferences: CookiePreferences = { analytics: false, marketing: false, experience: false };
-
-function cityKey(city: string, uf: string) {
-  return `${normalize(city)}-${uf.toUpperCase()}`;
-}
-
-function readCookiePreferences(): CookiePreferences | null {
-  const saved = localStorage.getItem(cookieStorageKey);
-  if (!saved) return null;
-  if (saved === "accepted") return allCookiePreferences;
-  if (saved === "rejected") return noOptionalCookiePreferences;
-  try {
-    const parsed = JSON.parse(saved) as Partial<CookiePreferences>;
-    return {
-      analytics: Boolean(parsed.analytics),
-      marketing: Boolean(parsed.marketing),
-      experience: Boolean(parsed.experience),
-    };
-  } catch {
-    return null;
-  }
-}
-
-function cityFromCatalog(city: string, uf: string, ibge?: string): CityCoverage {
-  const known = coverage.find((item) => cityKey(item.city, item.uf) === cityKey(city, uf));
-  if (known) return known;
-  const available = nationalEmitterCities.has(cityKey(city, uf));
-  return {
-    city,
-    uf,
-    ibge,
-    status: available ? "available" : "waitlist",
-    note: available ? "Cidade liberada para você começar a emitir em lote." : "Ainda não liberamos esta cidade para empresas fora do MEI.",
-  };
-}
-
-function cityFromPublicCoverage(item: PublicCoverageCity): CityCoverage {
-  return {
-    city: item.cidade,
-    uf: item.UF,
-    ibge: item.codibge,
-    status: item.atende ? "available" : "waitlist",
-    note: item.atende ? "Cidade disponível para contratação." : "Ainda não atendemos esta cidade.",
-  };
-}
-
-function cityFromNotaGuardCoverage(item: NotaGuardCoverageCity): CityCoverage {
+function cityFromNexCoverage(item: NexCoverageCity): CityCoverage {
   return {
     city: item.nome,
     uf: item.uf,
-    ibge: String(item.ibge),
-    status: item.emissorNacional ? "available" : "waitlist",
-    note: item.emissorNacional ? "Cidade disponível para contratação." : "Ainda não atendemos esta cidade.",
+    ibge: item.codigoIbge,
+    status: item.regimeGeralDisponivel ? "available" : "waitlist",
+    note: item.regimeGeralDisponivel
+      ? "Cidade disponível para contratação no regime geral."
+      : item.motivoRegimeGeralIndisponivel?.mensagem ?? "Ainda não atendemos esta cidade para empresas do regime geral.",
   };
 }
 
-function findCity(city: string, uf?: string, catalog = coverage) {
+function findCity(city: string, uf: string | undefined, catalog: CityCoverage[]) {
   const normalizedCity = normalizeSearch(city);
   const normalizedUf = uf ? normalizeSearch(uf) : "";
   return catalog.find((item) => normalizeSearch(item.city) === normalizedCity && (!normalizedUf || normalizeSearch(item.uf) === normalizedUf));
@@ -335,16 +269,13 @@ function parseCsvSimulation(text: string, source: string): SimulationResult {
 
 export function SalesPage() {
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
-  const [cookiePreferences, setCookiePreferences] = useState<CookiePreferences | null>(() => readCookiePreferences());
-  const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
-  const [cookieDraft, setCookieDraft] = useState<CookiePreferences>(allCookiePreferences);
   const [kind, setKind] = useState<CompanyKind | null>(null);
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [editingCity, setEditingCity] = useState(false);
   const [locating, setLocating] = useState(false);
   const [cityQuery, setCityQuery] = useState("São Paulo");
-  const [selectedCity, setSelectedCity] = useState<CityCoverage | null>(coverage[1]);
-  const [cityCatalog, setCityCatalog] = useState<CityCoverage[]>(coverage);
+  const [selectedCity, setSelectedCity] = useState<CityCoverage | null>(null);
+  const [cityCatalog, setCityCatalog] = useState<CityCoverage[]>([]);
   const [billing, setBilling] = useState<Billing>("monthly");
   const [volume, setVolume] = useState(6750);
   const [uploadedFileName, setUploadedFileName] = useState("Nenhum arquivo selecionado");
@@ -392,37 +323,24 @@ export function SalesPage() {
   }, []);
 
   useEffect(() => {
-    if (!cookiePreferences) return;
-    updateMarketingConsent(cookiePreferences);
-  }, [cookiePreferences]);
-
-  const updateCookiePreferences = (preferences: CookiePreferences) => {
-    localStorage.setItem(cookieStorageKey, JSON.stringify(preferences));
-    setCookiePreferences(preferences);
-    setCookieSettingsOpen(false);
-  };
-
-  useEffect(() => {
     let canceled = false;
-    const loadNotaGuardFallback = () => fetch("https://notaguard.com.br/guias/municipios-habilitados-nfse-nacional/dados")
-      .then((response) => response.ok ? response.json() as Promise<NotaGuardCoverageResponse> : Promise.reject(new Error("Cobertura NotaGuard indisponível")));
-
-    fetch("https://api.nexnotas.com.br/api/v1/public/cobertura")
-      .then((response) => response.ok ? response.json() as Promise<PublicCoverageCity[]> : Promise.reject(new Error("Cobertura indisponível")))
-      .catch(() => loadNotaGuardFallback())
-      .then((items) => {
+    fetch(coverageApiUrl, { headers: { Accept: "application/json" } })
+      .then((response) => response.ok ? response.json() as Promise<NexCoverageResponse> : Promise.reject(new Error("Cobertura indisponível")))
+      .then((response) => {
         if (canceled) return;
-        const cities = Array.isArray(items)
-          ? items.map(cityFromPublicCoverage)
-          : items.municipios?.map(cityFromNotaGuardCoverage);
+        const cities = response.municipios
+          ?.map(cityFromNexCoverage)
+          .sort((a, b) => a.city.localeCompare(b.city, "pt-BR", { sensitivity: "base" }));
         if (!cities?.length) return;
         setCityCatalog(cities);
+        setSelectedCity((current) => current ? findCity(current.city, current.uf, cities) ?? current : current);
       })
       .catch(() => undefined);
     return () => { canceled = true; };
   }, []);
 
   useEffect(() => {
+    if (!cityCatalog.length) return;
     let canceled = false;
     fetch("https://ipwho.is/?fields=success,city,region_code,country_code")
       .then((response) => response.ok ? response.json() as Promise<{ success?: boolean; city?: string; region_code?: string; country_code?: string }> : null)
@@ -523,6 +441,7 @@ export function SalesPage() {
             <a href="#beneficios" className="transition hover:text-[#4f56f6]">Benefícios</a>
             <a href="#planos" className="transition hover:text-[#4f56f6]">Preços</a>
             <a href="#faq" className="transition hover:text-[#4f56f6]">FAQ</a>
+            <a href="/municipios" className="transition hover:text-[#4f56f6]">Cidades</a>
             <a href="/ajuda" className="transition hover:text-[#4f56f6]">Ajuda</a>
           </nav>
           <div className="flex items-center gap-2">
@@ -956,10 +875,7 @@ export function SalesPage() {
             <button
               type="button"
               className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline"
-              onClick={() => {
-                setCookieDraft(cookiePreferences ?? allCookiePreferences);
-                setCookieSettingsOpen(true);
-              }}
+              onClick={openCookiePreferences}
             >
               Preferências de cookies
             </button>
@@ -1045,97 +961,6 @@ export function SalesPage() {
         ) : null}
       </Dialog>
 
-      <Dialog open={cookieSettingsOpen} onOpenChange={setCookieSettingsOpen}>
-        <DialogContent className="nex-sales-dialog max-w-2xl rounded-[16px] bg-[#080d26] p-6 text-white shadow-[0_30px_90px_rgba(6,12,38,.38)]">
-          <DialogHeader>
-            <DialogTitle className="text-2xl text-white">Configurações de cookies</DialogTitle>
-            <DialogDescription className="text-[#b7c0db]">Gerencie suas preferências. Suas escolhas serão salvas por 12 meses.</DialogDescription>
-          </DialogHeader>
-          <div className="mt-6 grid gap-5">
-            <div className="rounded-[14px] border border-white/10 bg-white/[.04] p-4">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex gap-3">
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-[#eafef3] text-[#118a51]"><ShieldCheck className="h-5 w-5" /></span>
-                  <div>
-                    <strong className="text-base text-white">Cookies essenciais</strong>
-                    <p className="mt-1 max-w-xl text-sm leading-6 text-[#c2cadf]">Necessários para funcionamento, segurança, navegação e preferências básicas do site.</p>
-                    <p className="mt-3 rounded-[10px] bg-white/10 px-3 py-2 text-xs leading-5 text-[#cbd3e7]">Exemplos: sessão, segurança, preferências de idioma e proteção contra abuso.</p>
-                  </div>
-                </div>
-                <span className="shrink-0 rounded-full border border-[#78e1ae]/30 bg-[#0e3b2b] px-3 py-1 text-xs font-semibold text-[#9ff0c5]">Sempre ativo</span>
-              </div>
-            </div>
-
-            <CookiePreferenceRow
-              icon={BarChart3}
-              title="Cookies analíticos"
-              description="Ajudam a entender como as pessoas usam a página para melhorarmos conteúdo, navegação e conversão."
-              details="Tecnologias: Google Analytics e PostHog. Dados: páginas visitadas, eventos, tempo de navegação, dispositivo e navegador."
-              checked={cookieDraft.analytics}
-              onChange={(analytics) => setCookieDraft((current) => ({ ...current, analytics }))}
-            />
-            <CookiePreferenceRow
-              icon={Gauge}
-              title="Cookies de experiência"
-              description="Ajudam a identificar travamentos, cliques e pontos de fricção para melhorar a experiência da página."
-              details="Tecnologia: Microsoft Clarity. Dados: interações, mapas de calor e gravações de sessão sem campos sensíveis."
-              checked={cookieDraft.experience}
-              onChange={(experience) => setCookieDraft((current) => ({ ...current, experience }))}
-            />
-            <CookiePreferenceRow
-              icon={BadgeCheck}
-              title="Cookies de marketing"
-              description="Permitem medir campanhas, otimizar anúncios e entender quais canais geram contratação."
-              details="Tecnologias: Meta Pixel, Google Ads e, futuramente, TikTok Pixel. Finalidade: conversões, remarketing e otimização de mídia."
-              checked={cookieDraft.marketing}
-              onChange={(marketing) => setCookieDraft((current) => ({ ...current, marketing }))}
-            />
-
-            <div className="rounded-[14px] bg-white/[.06] p-4 text-sm leading-6 text-[#c2cadf]">
-              Você pode alterar suas preferências a qualquer momento no rodapé da página. Dados sensíveis não devem ser enviados para ferramentas de análise e marketing.
-            </div>
-          </div>
-          <div className="mt-6 grid gap-3 sm:grid-cols-[1fr_1fr]">
-            <Button className="rounded-[10px] bg-[#4f56f6] text-white hover:bg-[#454cf0]" onClick={() => updateCookiePreferences(allCookiePreferences)}>Aceitar todos</Button>
-            <Button variant="outline" className="rounded-[10px] border-white/20 bg-transparent text-white hover:border-white/35 hover:bg-white/10 hover:text-white" onClick={() => updateCookiePreferences(cookieDraft)}>Salvar preferências</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {cookiePreferences === null && !cookieSettingsOpen ? (
-        <div className="fixed inset-0 z-40 bg-[#061747]/35 backdrop-blur-[2px]">
-          <div className="fixed bottom-5 left-1/2 w-[calc(100%-24px)] max-w-3xl -translate-x-1/2 rounded-[18px] border border-white/40 bg-white/90 p-5 text-center shadow-[0_28px_80px_rgba(6,23,71,.24)] backdrop-blur-xl sm:p-6">
-            <strong className="inline-flex items-center justify-center gap-2 font-heading text-xl font-semibold text-[#061747]">
-              <span className="text-[18px] leading-none" aria-hidden="true">🍪</span>
-              Política de cookies
-            </strong>
-            <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#667085]">Usamos cookies para melhorar sua experiência, analisar tráfego e personalizar conteúdo.</p>
-            <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-[#667085]">
-              Ao continuar usando o Nex Notas, você concorda com nossa{" "}
-              <a className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline" href="/privacidade">Política de Privacidade</a>{" "}
-              e nossos{" "}
-              <a className="font-semibold text-[#4f56f6] underline-offset-2 hover:underline" href="/termos">Termos de Uso</a>.
-            </p>
-            <div className="mt-5 flex justify-center">
-              <Button className="min-w-[170px] rounded-[10px] bg-[#4f56f6] text-white hover:bg-[#454cf0]" onClick={() => updateCookiePreferences(allCookiePreferences)}>Aceitar todos</Button>
-            </div>
-            <p className="mt-4 text-[11px] leading-5 text-[#7c879a]">
-              Você pode alterar suas preferências em{" "}
-              <button
-                type="button"
-                className="font-semibold text-[#4f56f6] underline underline-offset-2 hover:text-[#454cf0]"
-                onClick={() => {
-                  setCookieDraft(allCookiePreferences);
-                  setCookieSettingsOpen(true);
-                }}
-              >
-                Personalizar
-              </button>
-              .
-            </p>
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }
@@ -1162,49 +987,6 @@ function SectionHeading({ kicker, title, text, center = false }: { kicker: strin
       <SectionKicker>{kicker}</SectionKicker>
       <h2 className="font-heading text-3xl font-semibold leading-[1.18] tracking-tight text-[#061747] lg:text-[38px]">{title}</h2>
       <p className="mt-4 text-base leading-[1.75] text-[#667085]">{text}</p>
-    </div>
-  );
-}
-
-function CookiePreferenceRow({
-  icon: Icon,
-  title,
-  description,
-  details,
-  checked,
-  onChange,
-}: {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-  details: string;
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-}) {
-  return (
-    <div className="rounded-[14px] border border-white/10 bg-white/[.04] p-4">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex min-w-0 gap-3">
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-[#eef0ff] text-[#4f56f6]"><Icon className="h-5 w-5" /></span>
-          <div className="min-w-0">
-            <strong className="text-base text-white">{title}</strong>
-            <p className="mt-1 max-w-xl text-sm leading-6 text-[#c2cadf]">{description}</p>
-            <p className="mt-3 rounded-[10px] bg-white/10 px-3 py-2 text-xs leading-5 text-[#cbd3e7]">{details}</p>
-          </div>
-        </div>
-        <button
-          type="button"
-          aria-pressed={checked}
-          aria-label={`${checked ? "Desativar" : "Ativar"} ${title}`}
-          className={cn(
-            "relative mt-1 h-7 w-12 shrink-0 rounded-full border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#aeb6ff]",
-            checked ? "border-[#6f75ff] bg-[#4f56f6]" : "border-white/15 bg-white/10",
-          )}
-          onClick={() => onChange(!checked)}
-        >
-          <span className={cn("absolute top-1 h-5 w-5 rounded-full bg-white shadow-sm transition", checked ? "left-6" : "left-1")} />
-        </button>
-      </div>
     </div>
   );
 }
@@ -1490,7 +1272,7 @@ const footerLinks: Record<string, string> = {
   "Central de Ajuda": "/ajuda",
   FAQ: "/#faq",
   Ajuda: "/ajuda",
-  Disponibilidade: "/#cobertura",
+  Disponibilidade: "/municipios",
   "Termos de Uso": "/termos",
   "Política de Privacidade": "/privacidade",
   "Conformidade LGPD": "/lgpd",

@@ -10,6 +10,7 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
+import { openCookiePreferences } from "../components/cookie-consent";
 
 const affiliateUrl = "https://nexnotas.com.br/indicacoes";
 
@@ -184,6 +185,7 @@ export function ReferralsPage() {
           <div className="flex gap-5">
             <a className="hover:text-[#4f56f6]" href="/">Início</a>
             <a className="hover:text-[#4f56f6]" href="/#planos">Planos</a>
+            <button type="button" className="hover:text-[#4f56f6]" onClick={openCookiePreferences}>Cookies</button>
             <a className="hover:text-[#4f56f6]" href="https://app.nexnotas.com.br/entrar">Entrar</a>
           </div>
         </div>

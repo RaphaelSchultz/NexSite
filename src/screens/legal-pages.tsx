@@ -1,6 +1,7 @@
 import { ArrowLeft, FileText, Scale, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
+import { openCookiePreferences } from "../components/cookie-consent";
 
 type LegalSection = {
   title: string;
@@ -516,6 +517,12 @@ function LegalPage({ page }: { page: LegalPageContent }) {
           </div>
         </section>
       </main>
+      <footer className="border-t border-[#ebedf2] bg-white py-6">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 text-xs text-[#8a94a8]">
+          <span>© 2026 Nex Notas. Todos os direitos reservados.</span>
+          <button type="button" className="font-semibold text-[#4f56f6] hover:underline" onClick={openCookiePreferences}>Preferências de cookies</button>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { useMemo, useState, type CSSProperties } from "react";
 import { Button } from "../../components/ui/button";
+import { openCookiePreferences } from "../../components/cookie-consent";
 import { Input } from "../../components/ui/input";
 import { cn } from "../../lib/utils";
 
@@ -1410,6 +1411,7 @@ function HelpFooter() {
         <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 sm:justify-end">
           <Link className="hover:text-[#4f56f6]" to="/">Início</Link>
           <a className="hover:text-[#4f56f6]" href="/#planos">Planos</a>
+          <button type="button" className="hover:text-[#4f56f6]" onClick={openCookiePreferences}>Cookies</button>
           <a className="hover:text-[#4f56f6]" href="https://status.nexnotas.com.br" target="_blank" rel="noreferrer">Status</a>
           <a className="hover:text-[#4f56f6]" href={appUrl}>Entrar</a>
         </div>
