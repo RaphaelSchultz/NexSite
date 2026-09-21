@@ -137,6 +137,8 @@ const plans: Plan[] = [
   },
 ];
 
+const minimumHomologationPlan = plans.find((plan) => plan.id === "afiliado-expert")!;
+
 const signupUrl = "https://app.nexnotas.com.br/criar-conta";
 const coverageApiUrl = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? "https://app.nexnotas.com.br/api/v1/referencias/municipios-atendidos?limite=6000"
@@ -932,10 +934,10 @@ export function SalesPage() {
                       </div>
                     )}
                   </div>
-                  {selectedCity ? <CoveragePanel kind={kind} selectedCity={selectedCity} plan={selectedPlan} compact /> : null}
+                  {selectedCity ? <CoveragePanel kind={kind} selectedCity={selectedCity} plan={selectedPlan} onUpgrade={() => setSelectedPlan(minimumHomologationPlan)} compact /> : null}
                   <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
                     <Button variant="outline" className="gap-2" onClick={() => { setKind(null); setStep(1); }}><ChevronLeft className="h-4 w-4" />Voltar</Button>
-                    <Button disabled={!selectedCity} onClick={() => setStep(3)}>Continuar</Button>
+                    <Button disabled={!selectedCity || (!cityIsAvailable(selectedCity, kind) && !planIncludesMunicipalityHomologation(selectedPlan))} onClick={() => setStep(3)}>Continuar</Button>
                   </div>
                 </>
               ) : kind ? (
@@ -1329,11 +1331,12 @@ function CoverageBadge({ city, kind, plan }: { city: CityCoverage; kind: Company
   const available = cityIsAvailable(city, kind);
   if (available) return <span className="rounded-full bg-[#ecfdf3] px-2 py-1 text-[11px] font-bold text-[#16803c]">Atendido</span>;
   if (kind === "empresa" && planIncludesMunicipalityHomologation(plan)) return <span className="rounded-full bg-[#ecfdf3] px-2 py-1 text-[11px] font-bold text-[#16803c]">Homologação incluída</span>;
+  if (kind === "empresa") return <span className="rounded-full bg-[#fff7e6] px-2 py-1 text-[11px] font-bold text-[#a96500]">Homologação disponível</span>;
   if (city.status === "mei_only") return <span className="rounded-full bg-[#f4f5ff] px-2 py-1 text-[11px] font-bold text-[#4f56f6]">Somente MEI</span>;
   return <span className="rounded-full bg-[#f1f5f9] px-2 py-1 text-[11px] font-bold text-[#526073]">Lista de espera</span>;
 }
 
-function CoveragePanel({ kind, selectedCity, plan, compact, dark = false }: { kind: CompanyKind; selectedCity: CityCoverage | null; plan: Plan; compact: boolean; dark?: boolean }) {
+function CoveragePanel({ kind, selectedCity, plan, onUpgrade, compact, dark = false }: { kind: CompanyKind; selectedCity: CityCoverage | null; plan: Plan; onUpgrade: () => void; compact: boolean; dark?: boolean }) {
   const available = cityIsAvailable(selectedCity, kind);
   const homologationIncluded = Boolean(selectedCity && kind === "empresa" && !available && planIncludesMunicipalityHomologation(plan));
   if (selectedCity && homologationIncluded) {
@@ -1351,6 +1354,29 @@ function CoveragePanel({ kind, selectedCity, plan, compact, dark = false }: { ki
           <div>
             <strong className="block text-sm text-[#16704f]">Coberto pelo plano {plan.name}</strong>
             <p className="mt-1 text-sm leading-6 text-[#4f6b60]">Nossa equipe homologa a conexão com a prefeitura de {selectedCity.city} para o regime geral, sem custo adicional. Você pode seguir com a contratação normalmente.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (selectedCity && kind === "empresa" && !available) {
+    return (
+      <div className={cn("rounded-[12px] border border-[#f1dfaa] bg-[#fffbef]", compact ? "p-4" : "p-5")}>
+        <div className="flex items-start gap-3">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-[#e59a14]"><TriangleAlert className="h-5 w-5" /></span>
+          <div>
+            <strong className="block text-sm text-[#20283a]">Sua prefeitura ainda não está conectada?</strong>
+            <p className="mt-1 text-sm leading-6 text-[#667085]">Para emitir no regime geral em {selectedCity.city} / {selectedCity.uf}, é necessária uma homologação municipal.</p>
+          </div>
+        </div>
+        <div className="mt-4 rounded-[10px] border border-[#f2cc72] bg-white p-4">
+          <div className="flex items-start gap-3">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#fff3d6] text-[#b77900]"><ShieldCheck className="h-5 w-5" /></span>
+            <div>
+              <strong className="block text-sm text-[#6f4a00]">Disponível a partir do plano Afiliado Expert</strong>
+              <p className="mt-1 text-sm leading-6 text-[#667085]">Por R$ 147/mês, nossa equipe homologa a conexão com a prefeitura de {selectedCity.city}, sem custo adicional.</p>
+              <Button type="button" size="sm" className="mt-3 gap-2 rounded-[9px] bg-[#4f56f6] hover:bg-[#454cf0]" onClick={onUpgrade}>Escolher Afiliado Expert <ArrowRight className="h-4 w-4" /></Button>
+            </div>
           </div>
         </div>
       </div>
@@ -1382,39 +1408,11 @@ function CoverageStep({ icon: Icon, title, text }: { icon: LucideIcon; title: st
 }
 
 function CheckoutAction({ plan, kind, city }: { plan: Plan; kind: CompanyKind; city: CityCoverage | null }) {
-  const [joinedWaitlist, setJoinedWaitlist] = useState(false);
   const available = cityIsAvailable(city, kind);
   const homologationIncluded = kind === "empresa" && planIncludesMunicipalityHomologation(plan);
   if (!city) return <Button disabled>Selecione uma cidade</Button>;
   if (!available && !homologationIncluded) {
-    if (joinedWaitlist) {
-      return (
-        <div className="rounded-[10px] border border-[#cdd2ff] bg-[#f4f5ff] px-4 py-3 text-right">
-          <strong className="block text-sm text-[#061747]">Cidade registrada na lista de espera.</strong>
-          <span className="mt-1 block text-xs text-[#667085]">Vamos priorizar {city.city} / {city.uf} na expansão.</span>
-        </div>
-      );
-    }
-    return (
-      <Button
-        variant="outline"
-        className="gap-2"
-        onClick={() => {
-          const lead = {
-            plan: plan.name,
-            kind,
-            city: city.city,
-            uf: city.uf,
-            createdAt: new Date().toISOString(),
-          };
-          const current = JSON.parse(localStorage.getItem("nexnotas_waitlist") || "[]");
-          localStorage.setItem("nexnotas_waitlist", JSON.stringify([...current, lead]));
-          setJoinedWaitlist(true);
-        }}
-      >
-        Entrar na lista de espera <ArrowRight className="h-4 w-4" />
-      </Button>
-    );
+    return <Button disabled>Plano mínimo: Afiliado Expert</Button>;
   }
   return (
     <Button
