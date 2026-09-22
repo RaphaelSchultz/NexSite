@@ -101,7 +101,7 @@ export function CookieConsent() {
                   <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-[#eafef3] text-[#118a51]"><ShieldCheck className="h-5 w-5" /></span>
                   <div>
                     <strong className="text-base text-white">Cookies essenciais</strong>
-                    <p className="mt-1 max-w-xl text-sm leading-6 text-[#c2cadf]">Necessários para funcionamento, segurança, navegação e preferências básicas do site.</p>
+                    <p className="mt-1 max-w-xl text-sm leading-6 text-[#c2cadf]">Necessários para o funcionamento, a segurança, a navegação e as preferências básicas do site.</p>
                     <p className="mt-3 rounded-[10px] bg-white/10 px-3 py-2 text-xs leading-5 text-[#cbd3e7]">Exemplos: sessão, segurança, preferências de idioma e proteção contra abuso.</p>
                   </div>
                 </div>
@@ -112,7 +112,7 @@ export function CookieConsent() {
             <CookiePreferenceRow
               icon={BarChart3}
               title="Cookies analíticos"
-              description="Ajudam a entender como as pessoas usam a página para melhorarmos conteúdo, navegação e conversão."
+              description="Ajudam a entender como as pessoas usam a página para melhorarmos o conteúdo, a navegação e a conversão."
               details="Tecnologias: Google Analytics e PostHog. Dados: páginas visitadas, eventos, tempo de navegação, dispositivo e navegador."
               checked={draft.analytics}
               onChange={(analytics) => setDraft((current) => ({ ...current, analytics }))}
@@ -128,7 +128,7 @@ export function CookieConsent() {
             <CookiePreferenceRow
               icon={BadgeCheck}
               title="Cookies de marketing"
-              description="Permitem medir campanhas, otimizar anúncios e entender quais canais geram contratação."
+              description="Permitem medir campanhas, otimizar anúncios e entender quais canais geram contratações."
               details="Tecnologias: Meta Pixel, Google Ads e, futuramente, TikTok Pixel. Finalidade: conversões, remarketing e otimização de mídia."
               checked={draft.marketing}
               onChange={(marketing) => setDraft((current) => ({ ...current, marketing }))}

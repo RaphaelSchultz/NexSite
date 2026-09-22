@@ -18,11 +18,11 @@ const conversionPoints = [
   "Obrigação fiscal recorrente para afiliados Shopee PJ",
   "Público fácil de encontrar em grupos, mentorias e comunidades",
   "Assinatura mensal ou anual com comissão recorrente",
-  "Ticket acessível e garantia de 7 dias para o cliente",
+  "Preço acessível e garantia de 7 dias para o cliente",
 ];
 
 const rules = [
-  "A comissão é de 20% recorrente sobre assinaturas válidas, enquanto o cliente indicado permanecer ativo e adimplente.",
+  "A comissão recorrente é de 20% sobre assinaturas válidas, enquanto o cliente indicado permanecer ativo e adimplente.",
   "O cadastro, o link de divulgação, a atribuição da venda e os pagamentos são gerenciados pela Cakto.",
   "Não faça spam, não prometa resultado financeiro e não use comunicação que pareça oficial da Shopee.",
   "Não prometa isenção de impostos. O Nex Notas organiza a emissão de NFS-e para a Comissão Extra, mas não substitui orientação contábil.",
@@ -58,7 +58,7 @@ export function ReferralsPage() {
                 Programa de Afiliados Nex Notas
               </span>
               <h1 className="mt-7 font-heading text-[42px] font-semibold leading-[1.06] tracking-tight text-[#061747] sm:text-[58px] lg:text-[68px]">
-                Indique o Nex Notas e ganhe <span className="text-[#4f56f6]">20% recorrente</span>
+                Indique o Nex Notas e ganhe <span className="text-[#4f56f6]">20% de comissão recorrente</span>
               </h1>
               <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#667085] lg:mx-0">
                 Ajude afiliados Shopee PJ a resolver a emissão de notas da Comissão Extra e receba comissão enquanto o cliente indicado mantiver a assinatura ativa.
@@ -113,7 +113,7 @@ export function ReferralsPage() {
             <div className="mt-10 grid gap-4 md:grid-cols-3">
               <StepCard icon={Megaphone} title="Divulgue para afiliados Shopee" text="Fale com quem vende como PJ e precisa emitir notas da Comissão Extra todo mês." />
               <StepCard icon={Users} title="Use seu link da Cakto" text="Cadastre-se no programa, pegue seu link exclusivo e acompanhe as indicações pela plataforma." />
-              <StepCard icon={CircleDollarSign} title="Receba de forma recorrente" text="Quando o indicado assina e permanece ativo, você segue participando da recorrência." />
+              <StepCard icon={CircleDollarSign} title="Receba de forma recorrente" text="Quando o indicado assina e permanece ativo, você continua recebendo a comissão recorrente." />
             </div>
           </div>
         </section>
@@ -124,7 +124,7 @@ export function ReferralsPage() {
               <p className="text-xs font-semibold uppercase tracking-[.12em] text-[#5961e9]">Por que converte</p>
               <h2 className="mt-3 font-heading text-3xl font-semibold leading-tight tracking-tight text-[#061747] sm:text-[42px]">O afiliado Shopee PJ tem uma dor urgente e recorrente.</h2>
               <p className="mt-5 text-base leading-8 text-[#667085]">
-                Desde agosto de 2026, a operação com Comissão Extra exige mais organização fiscal. O Nex Notas transforma um relatório grande da Shopee em um lote pronto para revisão e emissão, reduzindo digitação manual e risco de duplicidade.
+                Desde agosto de 2026, a operação com Comissão Extra exige mais organização fiscal. O Nex Notas transforma um relatório extenso da Shopee em um lote pronto para revisão e emissão, reduzindo a digitação manual e o risco de duplicidade.
               </p>
             </div>
             <div className="grid gap-3">
@@ -168,7 +168,7 @@ export function ReferralsPage() {
             <p className="text-xs font-semibold uppercase tracking-[.12em] text-[#aeb6ff]">Convite aberto</p>
             <h2 className="font-heading text-3xl font-semibold leading-tight sm:text-[42px]">Entre no programa de afiliados da Nex Notas pela Cakto.</h2>
             <p className="max-w-2xl text-base leading-8 text-white/70">
-              Pegue seu link, divulgue para o público certo e acompanhe suas comissões recorrentes direto pela plataforma.
+              Pegue seu link, divulgue para o público certo e acompanhe suas comissões recorrentes diretamente pela plataforma.
             </p>
             <a href={affiliateUrl} target="_blank" rel="noreferrer">
               <Button size="lg" className="gap-2 rounded-[10px] bg-white px-6 text-[#4f56f6] hover:bg-[#f4f5ff]">

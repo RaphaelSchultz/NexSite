@@ -109,10 +109,10 @@ const guides: HelpGuide[] = [
     popular: true,
     keywords: ["empresa", "cnpj", "brasilapi", "onboarding", "cadastro", "endereco", "municipio"],
     steps: [
-      "Entre no app e siga para o cadastro de empresa no onboarding ou no menu Empresa.",
+      "Entre no app e siga para o cadastro da empresa na configuração inicial ou no menu Empresa.",
       "Informe um CNPJ válido e aguarde a consulta dos dados cadastrais.",
       "Revise razão social, município, UF, CEP, logradouro, número e bairro.",
-      "Complete manualmente qualquer campo de endereço que não retornar preenchido.",
+      "Complete manualmente qualquer campo de endereço que não tenha sido preenchido pela consulta.",
       "Salve a empresa e siga para certificado A1, segurança e plano.",
     ],
     quickFixes: [
@@ -130,7 +130,7 @@ const guides: HelpGuide[] = [
     popular: true,
     keywords: ["certificado", "a1", "pfx", "p12", "senha", "vencido", "renovar", "upload"],
     steps: [
-      "Acesse Configurações, Certificado, ou continue pelo passo de certificado no onboarding.",
+      "Acesse Configurações > Certificado ou continue pela etapa do certificado na configuração inicial.",
       "Selecione o arquivo A1 no formato .pfx ou .p12.",
       "Digite a senha do certificado exatamente como foi criada pela certificadora.",
       "Envie o arquivo e aguarde a validação de validade, chave privada e CNPJ.",
@@ -158,7 +158,7 @@ const guides: HelpGuide[] = [
     ],
     quickFixes: [
       "Não force um certificado de outro CNPJ: a prefeitura pode rejeitar a assinatura.",
-      "Em matriz e filial, confira também a Inscrição Municipal correta do prestador.",
+      "Para matriz e filial, confira também a Inscrição Municipal correta do prestador.",
     ],
     relatedLinks: ["certificado-a1", "cadastrar-empresa"],
   },
@@ -180,7 +180,7 @@ const guides: HelpGuide[] = [
     ],
     quickFixes: [
       "Erro de código municipal geralmente não se resolve reenviando a nota; ajuste a configuração primeiro.",
-      "MEI pode ter parte da configuração automática, mas ainda precisa de empresa, certificado e município prontos.",
+      "O MEI pode ter parte da configuração automática, mas ainda precisa ter empresa, certificado e município prontos.",
       "Para tomador estrangeiro, confira NIF, país e dados de comércio exterior.",
     ],
     relatedErrors: ["E0312", "CONFIG_ALIQUOTA_ISSQN", "DADOS_COMERCIO_EXTERIOR"],
@@ -203,8 +203,8 @@ const guides: HelpGuide[] = [
     ],
     quickFixes: [
       "O código nacional 170601 nem sempre basta; algumas cidades exigem um código local próprio.",
-      "Se todos os documentos do lote falharam com o mesmo código, a configuração do serviço provavelmente está incompleta.",
-      "Se apenas alguns falharam, confira dados do tomador ou regras por município/tipo de tomador.",
+      "Se todos os documentos do lote falharem com o mesmo código, a configuração do serviço provavelmente estará incompleta.",
+      "Se apenas alguns falharem, confira os dados do tomador ou as regras por município e tipo de tomador.",
     ],
     relatedErrors: ["E0312"],
     relatedLinks: ["configurar-emissao-shopee", "reprocessar-rejeicoes-sem-duplicar"],
@@ -220,7 +220,7 @@ const guides: HelpGuide[] = [
       "Acesse Configurações e abra Município ou Emissão municipal.",
       "Confira o canal identificado para sua cidade: nacional, municipal direto, ACBr ou indisponível.",
       "Quando solicitado, informe Inscrição Municipal exatamente como aparece no portal da prefeitura.",
-      "Preencha série RPS e próximo número RPS se o provedor exigir.",
+      "Preencha a série do RPS e o próximo número do RPS se o provedor exigir.",
       "Inclua usuário, senha, token ou chave de autorização apenas quando o canal pedir esses dados.",
       "Salve e rode a verificação de prontidão fiscal antes de emitir em lote.",
     ],
@@ -285,8 +285,8 @@ const guides: HelpGuide[] = [
     minutes: 5,
     keywords: ["nota avulsa", "amazon", "mercado livre", "shopee", "manual", "tomador"],
     steps: [
-      "Acesse Notas e escolha Nova emissão ou Nota avulsa.",
-      "Selecione um preset quando o tomador for Shopee, Amazon ou Mercado Livre.",
+      "Acesse a área de Notas e escolha Nova emissão ou Nota avulsa.",
+      "Selecione um modelo predefinido quando o tomador for Shopee, Amazon ou Mercado Livre.",
       "Preencha CNPJ, CPF ou identificação estrangeira do tomador.",
       "Informe razão social, endereço, e-mail, valor, serviço, competência fiscal e descrição.",
       "Revise o aviso de competência retroativa quando emitir referente ao mês anterior.",
@@ -312,7 +312,7 @@ const guides: HelpGuide[] = [
       "Enviando ou processando significa que a transmissão está em andamento.",
       "Autorizada significa que a NFS-e foi aceita e os arquivos podem ficar disponíveis.",
       "Rejeitada indica resposta da prefeitura ou ambiente fiscal que precisa de correção.",
-      "Falha transitória costuma indicar instabilidade ou timeout e pode permitir nova tentativa.",
+      "Falha transitória costuma indicar instabilidade ou tempo limite excedido e pode permitir uma nova tentativa.",
       "Pendente de confirmação exige cuidado: a nota pode ter sido enviada e ainda está sendo conciliada.",
       "Cancelada significa que o cancelamento foi concluído no ambiente fiscal.",
     ],
@@ -358,11 +358,11 @@ const guides: HelpGuide[] = [
       "Escolha o motivo adequado: erro na emissão, serviço não prestado, duplicidade ou outro.",
       "Para lote ainda não transmitido, use cancelar pendentes quando quiser remover documentos que não foram enviados.",
       "Use parar emissão para retirar documentos da fila sem mexer nos que já foram enviados.",
-      "Acompanhe status de cancelamento solicitado, cancelando, pendente, rejeitado ou cancelado.",
+      "Acompanhe o status do cancelamento: solicitado, cancelando, pendente, rejeitado ou cancelado.",
     ],
     quickFixes: [
       "Notas já enviadas podem precisar de confirmação da prefeitura antes de qualquer nova ação.",
-      "Cancelamento rejeitado deve ser analisado pelo motivo retornado pelo município.",
+      "Um cancelamento rejeitado deve ser analisado com base no motivo retornado pelo município.",
     ],
     relatedLinks: ["status-das-notas"],
   },
@@ -374,9 +374,9 @@ const guides: HelpGuide[] = [
     minutes: 5,
     keywords: ["tomador", "vendedor", "cnpj", "cpf", "estrangeiro", "cep", "email", "endereco"],
     steps: [
-      "Acesse Tomadores para localizar o vendedor pelo nome, documento ou e-mail.",
-      "Edite tipo de documento: CNPJ, CPF ou estrangeiro.",
-      "Use busca por CNPJ ou CEP quando disponível para preencher dados automaticamente.",
+      "Acesse a área de Tomadores para localizar o vendedor pelo nome, documento ou e-mail.",
+      "Edite o tipo de documento: CNPJ, CPF ou identificação estrangeira.",
+      "Use a busca por CNPJ ou CEP, quando disponível, para preencher os dados automaticamente.",
       "Revise logradouro, número, bairro, município, UF e código IBGE.",
       "Salve a correção e volte ao lote para reprocessar notas afetadas.",
     ],
@@ -395,11 +395,11 @@ const guides: HelpGuide[] = [
     minutes: 3,
     keywords: ["plano", "limite", "upgrade", "assinatura", "empresa", "notas mes"],
     steps: [
-      "Veja o aviso de limite na tela da nota, lote ou assinatura.",
+      "Veja o aviso de limite na tela da nota, do lote ou da assinatura.",
       "Confira se o limite atingido é de notas no mês ou de empresas cadastradas.",
       "Se for limite mensal, os documentos podem ficar preparados, mas não são transmitidos.",
       "Escolha um plano com franquia suficiente para seu volume.",
-      "Depois do upgrade, retome a emissão pelo lote ou notas pendentes.",
+      "Depois de mudar de plano, retome a emissão pelo lote ou pelas notas pendentes.",
     ],
     quickFixes: [
       "Histórico, XML e DANFSe continuam disponíveis mesmo ao atingir o limite.",
@@ -456,21 +456,21 @@ const errors: FiscalError[] = [
     code: "E2404",
     title: "NFS-e não localizada na consulta",
     meaning: "A prefeitura não encontrou a nota na consulta feita após a tentativa de emissão.",
-    action: "Use reprocessamento/consulta pelo app; se repetir, aguarde conciliação ou acione suporte.",
+    action: "Use as opções de reprocessamento ou consulta no app; se o problema se repetir, aguarde a conciliação ou acione o suporte.",
     keywords: ["consulta", "nfse", "prefeitura", "reprocessar"],
   },
   {
     code: "E0014",
     title: "DPS ou RPS já existente",
     meaning: "O ambiente fiscal identificou uma numeração ou chave que já foi usada.",
-    action: "Não crie outra nota manualmente; consulte a emissão existente ou ajuste série/numeração quando aplicável.",
+    action: "Não crie outra nota manualmente; consulte a emissão existente ou ajuste a série e a numeração, quando aplicável.",
     keywords: ["duplicidade", "dps", "rps", "serie", "numero"],
   },
   {
     code: "E0082",
     title: "Prestador não habilitado",
     meaning: "O CNPJ prestador pode não estar habilitado no município, no emissor nacional ou no canal usado.",
-    action: "Revise empresa, certificado, município, Inscrição Municipal e habilitação no portal fiscal.",
+    action: "Revise a empresa, o certificado, o município, a Inscrição Municipal e a habilitação no portal fiscal.",
     keywords: ["prestador", "habilitacao", "municipio", "empresa"],
   },
   {
@@ -505,7 +505,7 @@ const errors: FiscalError[] = [
     code: "LIMITE_PLANO",
     title: "Limite do plano atingido",
     meaning: "A empresa atingiu a franquia mensal de notas ou o limite de empresas cadastradas.",
-    action: "Faça upgrade do plano ou aguarde a renovação do ciclo para novas transmissões.",
+    action: "Mude de plano ou aguarde a renovação do ciclo para realizar novas transmissões.",
     keywords: ["plano", "limite", "upgrade", "assinatura"],
   },
   {
@@ -566,7 +566,7 @@ const errorDetails: Record<string, FiscalErrorDetail> = {
     ],
     avoid: [
       "Não substitua o documento por outro apenas para passar na validação.",
-      "Não cadastre o mesmo tomador duplicado com pequenas variações de documento.",
+      "Não cadastre o mesmo tomador duas vezes com pequenas variações no documento.",
     ],
     relatedLinks: ["corrigir-tomadores", "emitir-nota-avulsa"],
   },
@@ -579,7 +579,7 @@ const errorDetails: Record<string, FiscalErrorDetail> = {
     steps: [
       "Abra o cadastro do tomador indicado na rejeição.",
       "Corrija o e-mail usando um endereço válido.",
-      "Salve o cadastro antes de voltar ao lote ou nota.",
+      "Salve o cadastro antes de voltar ao lote ou à nota.",
       "Reenvie o e-mail fiscal quando a nota já estiver autorizada ou reprocesse quando a rejeição exigir nova emissão.",
     ],
     avoid: [
@@ -595,10 +595,10 @@ const errorDetails: Record<string, FiscalErrorDetail> = {
       "A nota pode precisar de nova conciliação antes de qualquer reenvio.",
     ],
     steps: [
-      "Abra os detalhes da nota e veja se há ação de reprocessar ou consultar.",
+      "Abra os detalhes da nota e veja se há uma ação para reprocessar ou consultar.",
       "Execute a ação indicada pelo app apenas uma vez.",
       "Se o status ficar pendente de confirmação, aguarde a reconciliação.",
-      "Se o erro se repetir, fale com suporte levando lote, nota e mensagem fiscal.",
+      "Se o erro se repetir, fale com o suporte e informe o lote, a nota e a mensagem fiscal.",
     ],
     avoid: [
       "Não crie uma nota nova para o mesmo tomador, competência e valor sem confirmar a anterior.",
@@ -646,13 +646,13 @@ const errorDetails: Record<string, FiscalErrorDetail> = {
   },
   X126: {
     causes: [
-      "A transmissão chegou ao ambiente fiscal, mas voltou sem número, código de verificação ou XML.",
+      "A transmissão chegou ao ambiente fiscal, mas retornou sem número, código de verificação ou XML.",
       "A prefeitura demorou a disponibilizar a consulta da NFS-e.",
-      "Houve timeout ou resposta incompleta durante a emissão.",
+      "O tempo limite foi excedido ou houve uma resposta incompleta durante a emissão.",
     ],
     steps: [
       "Não reenvie a nota imediatamente.",
-      "Acompanhe o status pendente de confirmação no detalhe da nota.",
+      "Acompanhe o status pendente de confirmação nos detalhes da nota.",
       "Aguarde a conciliação automática do Nex Notas.",
       "Se a pendência permanecer, fale com suporte informando lote, tomador, competência e valor.",
     ],
@@ -676,16 +676,16 @@ const errorDetails: Record<string, FiscalErrorDetail> = {
     ],
     avoid: [
       "Não use o botão de nova nota para duplicar uma emissão pendente.",
-      "Não considere pendente como rejeitada; são estados diferentes.",
+      "Não considere uma nota pendente como rejeitada; são estados diferentes.",
     ],
     relatedLinks: ["status-das-notas", "reprocessar-rejeicoes-sem-duplicar"],
   },
   CERTIFICADO_A1: {
     causes: [
-      "Arquivo não é um certificado A1 válido.",
-      "Senha do .pfx ou .p12 está incorreta.",
-      "Certificado está vencido, ainda não válido ou sem chave privada.",
-      "CNPJ do certificado não corresponde à empresa emissora.",
+      "O arquivo não é um certificado A1 válido.",
+      "A senha do arquivo .pfx ou .p12 está incorreta.",
+      "O certificado está vencido, ainda não é válido ou não possui uma chave privada.",
+      "O CNPJ do certificado não corresponde à empresa emissora.",
     ],
     steps: [
       "Separe o arquivo A1 original em .pfx ou .p12.",
@@ -702,10 +702,10 @@ const errorDetails: Record<string, FiscalErrorDetail> = {
   },
   CSV_INVALIDO: {
     causes: [
-      "Arquivo não tem nome no padrão MonthlyReport_YYYYMMDDHHMM.csv.",
-      "CSV foi aberto e salvo pelo Excel, alterando cabeçalho, codificação ou valores.",
-      "Colunas obrigatórias foram removidas ou renomeadas.",
-      "Comissão, CNPJ ou dados do vendedor estão fora do formato esperado.",
+      "O arquivo não tem um nome no padrão MonthlyReport_YYYYMMDDHHMM.csv.",
+      "O CSV foi aberto e salvo pelo Excel, alterando o cabeçalho, a codificação ou os valores.",
+      "As colunas obrigatórias foram removidas ou renomeadas.",
+      "A comissão, o CNPJ ou os dados do vendedor estão fora do formato esperado.",
     ],
     steps: [
       "Baixe uma nova cópia do relatório na Shopee.",
@@ -722,15 +722,15 @@ const errorDetails: Record<string, FiscalErrorDetail> = {
   },
   LIMITE_PLANO: {
     causes: [
-      "Franquia mensal de notas do plano foi consumida.",
-      "Quantidade de empresas cadastradas chegou ao limite do plano.",
-      "Documentos foram preparados, mas a transmissão fiscal foi bloqueada pelo limite.",
+      "A franquia mensal de notas do plano foi consumida.",
+      "A quantidade de empresas cadastradas chegou ao limite do plano.",
+      "Os documentos foram preparados, mas a transmissão fiscal foi bloqueada pelo limite.",
     ],
     steps: [
-      "Abra Assinatura ou o aviso exibido no lote/nota.",
+      "Abra a área de Assinatura ou o aviso exibido no lote ou na nota.",
       "Confira se o limite é de notas mensais ou empresas.",
       "Escolha um plano com capacidade suficiente para o mês.",
-      "Depois do upgrade, volte ao lote ou nota pendente e retome a emissão.",
+      "Depois de mudar de plano, volte ao lote ou à nota pendente e retome a emissão.",
     ],
     avoid: [
       "Não apague lotes antigos para tentar liberar limite; o limite considera uso do ciclo.",
@@ -740,9 +740,9 @@ const errorDetails: Record<string, FiscalErrorDetail> = {
   },
   DADOS_TOMADOR: {
     causes: [
-      "Endereço do tomador está incompleto.",
-      "CEP, município, UF ou código IBGE não correspondem.",
-      "Documento fiscal ou tipo do tomador está inconsistente.",
+      "O endereço do tomador está incompleto.",
+      "O CEP, o município, a UF ou o código IBGE não correspondem aos dados informados.",
+      "O documento fiscal ou o tipo do tomador está inconsistente.",
     ],
     steps: [
       "Abra o cadastro do tomador pelo menu Tomadores.",
@@ -758,13 +758,13 @@ const errorDetails: Record<string, FiscalErrorDetail> = {
   },
   DADOS_COMERCIO_EXTERIOR: {
     causes: [
-      "Tomador estrangeiro sem NIF ou identificação fiscal estrangeira.",
-      "País do tomador não informado.",
-      "Configuração de comércio exterior incompleta para a regra fiscal usada.",
+      "O tomador estrangeiro está sem NIF ou identificação fiscal estrangeira.",
+      "O país do tomador não foi informado.",
+      "A configuração de comércio exterior está incompleta para a regra fiscal usada.",
     ],
     steps: [
       "Confira se o tomador está marcado como estrangeiro.",
-      "Preencha país e identificação fiscal estrangeira quando existir.",
+      "Preencha o país e a identificação fiscal estrangeira, quando houver.",
       "Revise campos de comércio exterior na configuração fiscal.",
       "Reprocesse depois de salvar os dados corrigidos.",
     ],
@@ -776,14 +776,14 @@ const errorDetails: Record<string, FiscalErrorDetail> = {
   },
   CONFIG_ALIQUOTA_ISSQN: {
     causes: [
-      "Alíquota de ISS não foi preenchida.",
-      "Alíquota configurada diverge do regime tributário ou regra municipal.",
-      "Retenção de ISS foi marcada de forma incorreta para o caso.",
+      "A alíquota de ISS não foi preenchida.",
+      "A alíquota configurada diverge do regime tributário ou da regra municipal.",
+      "A retenção de ISS foi marcada de forma incorreta para o caso.",
     ],
     steps: [
       "Confirme com seu contador a alíquota aplicável ao serviço.",
       "Abra a configuração fiscal do serviço.",
-      "Atualize alíquota, retenção e município de incidência.",
+      "Atualize a alíquota, a retenção e o município de incidência.",
       "Salve e reprocesse apenas documentos rejeitados por essa regra.",
     ],
     avoid: [
@@ -853,7 +853,7 @@ function detailForError(error: FiscalError): FiscalErrorDetail {
   return errorDetails[error.code] ?? {
     causes: ["A mensagem fiscal retornou uma validação que precisa ser revisada antes de nova tentativa."],
     steps: [
-      "Abra o detalhe da nota no app.",
+      "Abra os detalhes da nota no app.",
       "Leia a mensagem fiscal completa.",
       "Corrija o campo ou configuração indicada.",
       "Reprocesse somente depois de salvar a correção.",
@@ -1039,7 +1039,7 @@ function GuidePage({ guide }: { guide: HelpGuide }) {
             </section>
 
             <section className="mt-6 rounded-[18px] border border-[#e2e6ef] bg-white p-6 sm:p-8">
-              <h2 className="font-heading text-2xl font-semibold text-[#061747]">Correcoes rapidas</h2>
+              <h2 className="font-heading text-2xl font-semibold text-[#061747]">Correções rápidas</h2>
               <div className="mt-5 grid gap-3">
                 {guide.quickFixes.map((fix) => (
                   <div key={fix} className="flex gap-3 rounded-[12px] border border-[#e7ebf3] bg-[#fbfcff] p-4">
@@ -1284,7 +1284,7 @@ function ErrorPage({ error }: { error: FiscalError }) {
             </div>
 
             <section className="mt-6 rounded-[18px] border border-[#e2e6ef] bg-white p-6 sm:p-8">
-              <h2 className="font-heading text-2xl font-semibold text-[#061747]">Causas provaveis</h2>
+              <h2 className="font-heading text-2xl font-semibold text-[#061747]">Causas prováveis</h2>
               <div className="mt-5 grid gap-3">
                 {detail.causes.map((cause) => (
                   <div key={cause} className="flex gap-3 rounded-[12px] border border-[#e7ebf3] bg-[#fbfcff] p-4">
@@ -1323,7 +1323,7 @@ function ErrorPage({ error }: { error: FiscalError }) {
           <aside className="min-w-0 xl:sticky xl:top-24 xl:self-start">
             <div className="rounded-[16px] border border-[#e2e6ef] bg-white p-5">
               <h2 className="font-heading text-lg font-semibold text-[#061747]">Resolver no app</h2>
-              <p className="mt-2 text-sm leading-6 text-[#667085]">Abra a nota ou lote para ver a mensagem completa, corrigir dados e reprocessar quando for seguro.</p>
+              <p className="mt-2 text-sm leading-6 text-[#667085]">Abra a nota ou o lote para ver a mensagem completa, corrigir os dados e reprocessar quando for seguro.</p>
               <a className="mt-4 block" href={appUrl}>
                 <Button className="w-full gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Acessar minha conta <ArrowUpRight className="h-4 w-4" /></Button>
               </a>

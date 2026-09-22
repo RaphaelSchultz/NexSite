@@ -31,8 +31,8 @@ const pages = {
       {
         title: "Aceitação dos Termos",
         paragraphs: [
-          "Estes Termos de Uso regulam o acesso e a utilização da plataforma Nex Notas, incluindo sites, sistemas, funcionalidades, painéis, fluxos de onboarding, importação de arquivos, emissão fiscal, integrações, suporte e demais serviços relacionados.",
-          "Ao acessar, criar uma conta, contratar um plano, realizar onboarding, importar arquivos, cadastrar empresas, configurar certificados digitais ou utilizar qualquer funcionalidade do Nex Notas, o usuário declara que leu, compreendeu e concorda com estes Termos de Uso e com a Política de Privacidade.",
+          "Estes Termos de Uso regulam o acesso e a utilização da plataforma Nex Notas, incluindo sites, sistemas, funcionalidades, painéis, fluxos de configuração inicial, importação de arquivos, emissão fiscal, integrações, suporte e demais serviços relacionados.",
+          "Ao acessar, criar uma conta, contratar um plano, realizar a configuração inicial, importar arquivos, cadastrar empresas, configurar certificados digitais ou utilizar qualquer funcionalidade do Nex Notas, o usuário declara que leu, compreendeu e concorda com estes Termos de Uso e com a Política de Privacidade.",
           "Caso não concorde com estes Termos, o usuário não deve utilizar a plataforma.",
         ],
       },
@@ -44,10 +44,10 @@ const pages = {
         ],
         bullets: [
           "Cadastro de usuários, contas, empresas e membros de equipe.",
-          "Onboarding fiscal da empresa e gestão de configurações fiscais.",
-          "Upload, validação e uso operacional de certificado digital A1.",
+          "Configuração fiscal inicial da empresa e gestão de configurações fiscais.",
+          "Envio, validação e uso operacional de certificado digital A1.",
           "Importação de relatórios, cadastro de tomadores e preparação de dados fiscais.",
-          "Emissão, consulta, download, cancelamento e envio de NFS-e, XML e DANFSe.",
+          "Emissão, consulta, baixa, cancelamento e envio de NFS-e, XML e DANFSe.",
           "Painéis de uso, limites, planos, assinatura, segurança, auditoria e suporte.",
         ],
       },
@@ -78,7 +78,7 @@ const pages = {
       {
         title: "Responsabilidades das Partes",
         paragraphs: [
-          "O Nex Notas é responsável por manter a plataforma, os recursos contratados, os controles de segurança sob sua gestão e o tratamento de dados que realizar como controlador ou operador, nos limites da lei e destes Termos.",
+          "O Nex Notas é responsável por manter a plataforma, os recursos contratados e os controles de segurança sob sua gestão, bem como por realizar o tratamento de dados como controlador ou operador, nos limites da lei e destes Termos.",
           "O usuário, a conta contratante e a empresa cadastrada são responsáveis pelas informações, arquivos, instruções, credenciais, permissões, certificados, configurações fiscais, decisões de emissão e obrigações legais, fiscais, contábeis e tributárias que estejam sob sua esfera de controle.",
           "O Nex Notas não se responsabiliza por prejuízos decorrentes de dados incorretos, incompletos ou desatualizados fornecidos pelo usuário; uso de certificado sem autorização; emissão solicitada em desacordo com a operação real; classificação fiscal, regime tributário, alíquota, retenção, CNAE, município ou natureza de serviço informados incorretamente; falhas de conexão, indisponibilidade ou rejeições de órgãos públicos, prefeituras, SEFIN, provedores municipais, gateways, serviços de e-mail, serviços de pagamento ou demais terceiros; nem por decisões fiscais ou contábeis tomadas sem orientação profissional.",
           "Essa divisão não exclui responsabilidades que não possam ser afastadas pela legislação aplicável. Caso exista falha comprovadamente atribuível ao Nex Notas, a responsabilidade será analisada conforme a participação de cada parte, o nexo causal, os limites legais e as condições contratadas.",
@@ -89,7 +89,7 @@ const pages = {
         paragraphs: [
           "Quando o usuário envia um certificado digital A1, declara que possui autorização legítima para utilizá-lo em nome da empresa correspondente. O certificado e sua senha são utilizados para viabilizar funcionalidades fiscais, incluindo assinatura, transmissão, consulta, cancelamento ou processamento de documentos fiscais.",
           "O usuário reconhece que falhas em dados fiscais, configuração municipal, certificado vencido, indisponibilidade de prefeituras, ambiente nacional, provedores municipais, SEFIN, APIs públicas ou serviços de terceiros podem impedir, atrasar ou rejeitar a emissão.",
-          "O Nex Notas poderá armazenar arquivos fiscais, XML, DANFSe, protocolos, respostas fiscais, eventos de auditoria e registros técnicos necessários para funcionamento, rastreabilidade, segurança, suporte e cumprimento de obrigações legais.",
+          "O Nex Notas poderá armazenar arquivos fiscais, XML, DANFSe, protocolos, respostas fiscais, eventos de auditoria e registros técnicos necessários para o funcionamento, a rastreabilidade, a segurança, o suporte e o cumprimento de obrigações legais.",
         ],
       },
       {
@@ -110,7 +110,7 @@ const pages = {
           "Usar dados pessoais, empresariais ou fiscais de terceiros sem autorização.",
           "Enviar arquivos maliciosos, vírus, scripts ou conteúdo prejudicial.",
           "Tentar acessar contas, dados, APIs, infraestrutura ou áreas administrativas sem permissão.",
-          "Realizar engenharia reversa, scraping abusivo, exploração de falhas ou sobrecarga da plataforma.",
+          "Realizar engenharia reversa, coleta automatizada abusiva, exploração de falhas ou sobrecarga da plataforma.",
           "Violar direitos de terceiros, legislação aplicável, normas fiscais ou políticas de provedores integrados.",
         ],
       },
@@ -132,7 +132,7 @@ const pages = {
       {
         title: "Privacidade e Proteção de Dados",
         paragraphs: [
-          "O tratamento de dados pessoais pelo Nex Notas é descrito na Política de Privacidade e na página de LGPD. Ao utilizar a plataforma, o usuário declara estar ciente de que dados pessoais, técnicos, fiscais, empresariais, de segurança, autenticação, pagamento e uso poderão ser tratados conforme as finalidades informadas.",
+          "O tratamento de dados pessoais pelo Nex Notas é descrito na Política de Privacidade e na página de LGPD. Ao utilizar a plataforma, o usuário declara estar ciente de que dados pessoais, técnicos, fiscais, empresariais, de segurança, de autenticação, de pagamento e de uso poderão ser tratados conforme as finalidades informadas.",
         ],
       },
       {
@@ -171,7 +171,7 @@ const pages = {
       {
         title: "Introdução",
         paragraphs: [
-          "Esta Política de Privacidade explica como o Nex Notas coleta, utiliza, armazena, compartilha e protege dados pessoais no uso do site, da plataforma, do onboarding, dos fluxos de cadastro, autenticação, importação, emissão fiscal, pagamento, suporte e demais serviços relacionados.",
+          "Esta Política de Privacidade explica como o Nex Notas coleta, utiliza, armazena, compartilha e protege dados pessoais no uso do site, da plataforma, da configuração inicial, dos fluxos de cadastro, autenticação, importação, emissão fiscal, pagamento, suporte e demais serviços relacionados.",
           "Esta Política foi elaborada considerando a Lei Geral de Proteção de Dados Pessoais, Lei nº 13.709/2018, conhecida como LGPD.",
           "Ao utilizar o Nex Notas, o usuário declara estar ciente das práticas descritas nesta Política.",
         ],
@@ -190,15 +190,15 @@ const pages = {
         title: "Dados de Autenticação e Segurança",
         paragraphs: ["Para proteger a conta e a plataforma, podemos tratar dados técnicos e registros de segurança."],
         bullets: [
-          "Endereço IP, hash de IP, user agent e hash de user agent.",
+          "Endereço IP, hash de IP, identificador do navegador (user agent) e seu respectivo hash.",
           "País, região, cidade aproximada, data e hora de acesso.",
           "Tentativas de login, falhas, bloqueios, códigos de autenticação e MFA/TOTP.",
-          "Registro de dispositivos confiáveis, cookies de sessão, logs de auditoria e eventos administrativos.",
+          "Registro de dispositivos confiáveis, cookies de sessão, registros de auditoria e eventos administrativos.",
         ],
       },
       {
-        title: "Dados de Empresa e Onboarding",
-        paragraphs: ["Durante o onboarding e o uso fiscal, podemos coletar dados empresariais, cadastrais e operacionais."],
+        title: "Dados da Empresa e Configuração Inicial",
+        paragraphs: ["Durante a configuração inicial e o uso fiscal, podemos coletar dados empresariais, cadastrais e operacionais."],
         bullets: [
           "CNPJ, razão social, nome fantasia, e-mail e telefone da empresa.",
           "Endereço, CEP, cidade, UF, código IBGE, CNAE, porte e regime fiscal.",
@@ -210,7 +210,7 @@ const pages = {
         title: "Certificado Digital A1",
         paragraphs: [
           "Quando necessário para emissão fiscal, o usuário pode enviar certificado digital A1 e senha. Esses dados são utilizados para validar, armazenar de forma protegida e operar funcionalidades fiscais vinculadas à empresa cadastrada.",
-          "O Nex Notas pode armazenar o certificado de forma criptografada, metadados técnicos, validade, CNPJ associado, fingerprint e informações necessárias para operação fiscal. A senha do certificado também pode ser protegida separadamente.",
+          "O Nex Notas pode armazenar o certificado de forma criptografada, metadados técnicos, validade, CNPJ associado, identificador técnico (fingerprint) e informações necessárias para a operação fiscal. A senha do certificado também pode ser protegida separadamente.",
         ],
       },
       {
@@ -236,20 +236,20 @@ const pages = {
         title: "Pagamento, Plano e Assinatura",
         paragraphs: [
           "Em fluxos de contratação e cobrança, podemos tratar dados necessários para pagamento, antifraude, aceite legal, gestão de assinatura, faturas e conciliação.",
-          "Dados completos de cartão, quando aplicável, devem ser processados diretamente por provedores de pagamento autorizados, não sendo objetivo do Nex Notas armazenar número completo de cartão.",
+          "Dados completos de cartão, quando aplicável, devem ser processados diretamente por provedores de pagamento autorizados, não sendo objetivo do Nex Notas armazenar o número completo do cartão.",
         ],
         bullets: [
           "Nome, e-mail, telefone, documento informado ou mascarado.",
           "Plano, oferta, cupom, afiliado, origem, UTM e aceite legal.",
-          "IP ou hash de IP, fingerprint antifraude, status de assinatura, fatura e pagamento.",
+          "IP ou hash de IP, identificador técnico para prevenção de fraudes, status de assinatura, fatura e pagamento.",
           "IDs de provedores de pagamento e eventos de webhook financeiros.",
         ],
       },
       {
         title: "Cookies e Navegação",
         paragraphs: [
-          "No site e na plataforma, podemos usar cookies e tecnologias similares para funcionamento, segurança, sessão, autenticação, preferências, analytics, marketing e melhoria de experiência.",
-          "Cookies necessários são essenciais para a plataforma funcionar. Cookies opcionais, como analytics, marketing e experiência, devem respeitar as preferências do usuário quando aplicável.",
+          "No site e na plataforma, podemos usar cookies e tecnologias similares para funcionamento, segurança, sessão, autenticação, preferências, análise de uso, marketing e melhoria da experiência.",
+          "Cookies necessários são essenciais para a plataforma funcionar. Cookies opcionais, como os de análise de uso, marketing e experiência, devem respeitar as preferências do usuário quando aplicável.",
         ],
         bullets: [
           "Cookies necessários para sessão, segurança e autenticação.",
@@ -263,17 +263,17 @@ const pages = {
         paragraphs: ["Os dados são tratados para prestar, proteger, melhorar e administrar a plataforma."],
         bullets: [
           "Criar e administrar contas, autenticar usuários e prevenir fraude.",
-          "Realizar onboarding fiscal, validar empresas, certificados e configurações.",
+          "Realizar a configuração fiscal inicial e validar empresas, certificados e configurações.",
           "Importar, processar, emitir, consultar, cancelar e armazenar documentos fiscais.",
           "Enviar XML, DANFSe e comunicações transacionais.",
           "Gerenciar planos, pagamentos, assinaturas, limites e suporte.",
           "Cumprir obrigações legais, fiscais, regulatórias e contratuais.",
-          "Manter logs de auditoria, segurança e atender solicitações de titulares e autoridades.",
+          "Manter registros de auditoria e segurança, bem como atender a solicitações de titulares e autoridades.",
         ],
       },
       {
         title: "Bases Legais",
-        paragraphs: ["Dependendo do caso, o Nex Notas pode tratar dados pessoais com base em execução de contrato, cumprimento de obrigação legal ou regulatória, exercício regular de direitos, legítimo interesse, consentimento, proteção do crédito ou prevenção a fraude."],
+        paragraphs: ["Dependendo do caso, o Nex Notas pode tratar dados pessoais com base em execução de contrato, cumprimento de obrigação legal ou regulatória, exercício regular de direitos, legítimo interesse, consentimento, proteção do crédito ou prevenção à fraude."],
       },
       {
         title: "Compartilhamento de Dados",
@@ -294,14 +294,14 @@ const pages = {
       {
         title: "Armazenamento e Segurança",
         paragraphs: [
-          "O Nex Notas adota medidas técnicas e organizacionais para proteger dados pessoais, incluindo criptografia, controles de acesso, logs, segregação de ambientes, proteção de credenciais, autenticação multifator, armazenamento privado de arquivos fiscais e uso de hashes quando adequado.",
+          "O Nex Notas adota medidas técnicas e organizacionais para proteger dados pessoais, incluindo criptografia, controles de acesso, registros, segregação de ambientes, proteção de credenciais, autenticação multifator, armazenamento privado de arquivos fiscais e uso de hashes quando adequado.",
           "Apesar das medidas de segurança, nenhum sistema é totalmente imune a incidentes. Em caso de incidente relevante envolvendo dados pessoais, o Nex Notas adotará as medidas cabíveis, incluindo avaliação, mitigação, comunicação quando aplicável e cooperação com autoridades competentes.",
         ],
       },
       {
         title: "Retenção e Eliminação",
         paragraphs: [
-          "Os dados serão mantidos pelo período necessário para cumprir as finalidades descritas nesta Política, obrigações legais, fiscais, contábeis, contratuais, regulatórias, prevenção a fraude, auditoria, suporte e exercício regular de direitos.",
+          "Os dados serão mantidos pelo período necessário para atender às finalidades descritas nesta Política e cumprir obrigações legais, fiscais, contábeis, contratuais e regulatórias, bem como para prevenção à fraude, auditoria, suporte e exercício regular de direitos.",
           "Quando não forem mais necessários, os dados poderão ser eliminados, anonimizados ou bloqueados, conforme aplicável.",
         ],
       },
@@ -315,7 +315,7 @@ const pages = {
       },
       {
         title: "Transferência Internacional",
-        paragraphs: ["Alguns fornecedores de infraestrutura, e-mail, autenticação, segurança, analytics ou pagamento podem tratar dados fora do Brasil. Quando isso ocorrer, o Nex Notas adotará medidas compatíveis com a LGPD e buscará trabalhar com fornecedores que ofereçam padrões adequados de proteção."],
+        paragraphs: ["Alguns fornecedores de infraestrutura, e-mail, autenticação, segurança, análise de uso ou pagamento podem tratar dados fora do Brasil. Quando isso ocorrer, o Nex Notas adotará medidas compatíveis com a LGPD e buscará trabalhar com fornecedores que ofereçam padrões adequados de proteção."],
       },
       {
         title: "Alterações e Contato",
@@ -344,7 +344,7 @@ const pages = {
         title: "Papel do Nex Notas",
         paragraphs: [
           "Dependendo do contexto, o Nex Notas pode atuar como controlador ou operador de dados pessoais.",
-          "Em geral, o Nex Notas poderá atuar como controlador dos dados necessários para cadastro, autenticação, cobrança, segurança, suporte, analytics, relacionamento com usuários e administração da plataforma.",
+          "Em geral, o Nex Notas poderá atuar como controlador dos dados necessários para cadastro, autenticação, cobrança, segurança, suporte, análise de uso, relacionamento com usuários e administração da plataforma.",
           "Em determinadas operações fiscais realizadas em nome do usuário ou da empresa cadastrada, o Nex Notas poderá atuar como operador, tratando dados conforme instruções do cliente para viabilizar importações, emissão fiscal, armazenamento de arquivos, envio de documentos e suporte operacional.",
         ],
       },
@@ -369,16 +369,16 @@ const pages = {
       },
       {
         title: "Dados Tratados",
-        paragraphs: ["A plataforma pode tratar dados de usuários, membros de conta, empresas emitentes, tomadores, vendedores, certificados digitais A1, arquivos importados, documentos fiscais, XML, DANFSe, protocolos, sessões, IPs, logs, eventos de segurança, pagamentos, assinaturas, aceites legais e comunicações transacionais ou fiscais."],
+        paragraphs: ["A plataforma pode tratar dados de usuários, membros de conta, empresas emitentes, tomadores, vendedores, certificados digitais A1, arquivos importados, documentos fiscais, XML, DANFSe, protocolos, sessões, IPs, registros, eventos de segurança, pagamentos, assinaturas, aceites legais e comunicações transacionais ou fiscais."],
       },
       {
         title: "Segurança da Informação",
-        paragraphs: ["Entre as medidas adotadas ou recomendadas na operação do Nex Notas estão controles técnicos e administrativos para reduzir risco, proteger acessos e preservar rastreabilidade."],
+        paragraphs: ["Entre as medidas adotadas ou recomendadas na operação do Nex Notas estão controles técnicos e administrativos para reduzir riscos, proteger acessos e preservar a rastreabilidade."],
         bullets: [
           "Uso de HTTPS/TLS, cookies de sessão protegidos e autenticação multifator.",
-          "Rate limit, bloqueios de segurança, registro de tentativas suspeitas e logs de auditoria.",
-          "Hash de determinados identificadores técnicos e criptografia de certificado digital e senha.",
-          "Buckets privados para arquivos fiscais e controles administrativos com autenticação reforçada.",
+          "Limitação da taxa de requisições, bloqueios de segurança, registro de tentativas suspeitas e registros de auditoria.",
+          "Uso de hash em determinados identificadores técnicos e criptografia do certificado digital e da senha.",
+          "Repositórios privados para arquivos fiscais e controles administrativos com autenticação reforçada.",
           "Separação de permissões por conta, empresa e papel de usuário.",
         ],
       },
@@ -393,7 +393,7 @@ const pages = {
       {
         title: "Cookies e Consentimento",
         paragraphs: [
-          "O Nex Notas utiliza cookies necessários para funcionamento, autenticação e segurança. Cookies opcionais de analytics, marketing ou experiência devem respeitar as escolhas do usuário.",
+          "O Nex Notas utiliza cookies necessários para o funcionamento, a autenticação e a segurança. Cookies opcionais de análise de uso, marketing ou experiência devem respeitar as escolhas do usuário.",
           "O usuário deve poder aceitar, recusar ou personalizar cookies opcionais quando aplicável. A plataforma deve evitar enviar dados sensíveis ou fiscais para ferramentas de análise, marketing ou gravação de sessão.",
         ],
       },
@@ -405,7 +405,7 @@ const pages = {
         title: "Resposta a Solicitações",
         paragraphs: [
           "Ao receber uma solicitação, o Nex Notas poderá validar a identidade do solicitante antes de fornecer informações ou realizar alterações, especialmente quando houver risco de exposição de dados fiscais, empresariais, financeiros ou de terceiros.",
-          "Alguns dados podem não ser eliminados imediatamente quando houver obrigação legal, fiscal, regulatória, necessidade de auditoria, prevenção a fraude ou exercício regular de direitos.",
+          "Alguns dados podem não ser eliminados imediatamente quando houver obrigação legal, fiscal ou regulatória, necessidade de auditoria, prevenção à fraude ou exercício regular de direitos.",
         ],
       },
       {

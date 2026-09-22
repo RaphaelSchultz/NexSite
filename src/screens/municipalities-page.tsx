@@ -130,7 +130,7 @@ export function MunicipalitiesPage() {
     const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
     const previousDescription = description?.content;
     document.title = "Municípios atendidos | Nex Notas";
-    if (description) description.content = "Consulte os municípios atendidos pela Nex Notas para emissão de NFS-e por MEI e empresas do regime geral.";
+    if (description) description.content = "Consulte os municípios atendidos pela Nex Notas para emissão de NFS-e por MEIs e empresas do regime geral.";
     return () => {
       document.title = previousTitle;
       if (description && previousDescription) description.content = previousDescription;
@@ -319,7 +319,7 @@ export function MunicipalitiesPage() {
             ) : searching ? (
               <div className="mt-8">
                 <div className="mb-4 flex items-center justify-between gap-4">
-                  <p className="text-sm text-[#667085]"><strong className="text-[#243150]">{numberFormatter.format(filteredMunicipalities.length)}</strong> resultado(s) encontrado(s)</p>
+                  <p className="text-sm text-[#667085]"><strong className="text-[#243150]">{numberFormatter.format(filteredMunicipalities.length)}</strong> {filteredMunicipalities.length === 1 ? "resultado encontrado" : "resultados encontrados"}</p>
                   {filteredMunicipalities.length > searchResultLimit ? <span className="text-xs text-[#98a2b3]">Mostrando os primeiros {searchResultLimit}</span> : null}
                 </div>
                 {searchResults.length ? (
@@ -389,7 +389,7 @@ export function MunicipalitiesPage() {
         <section className="bg-white px-5 py-20">
           <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-7 rounded-[18px] bg-[#4f56f6] p-6 text-center text-white sm:p-12 lg:flex-row lg:text-left">
             <div>
-              <span className="inline-flex rounded-full bg-white/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[.08em] text-white">Incluso a partir do Afiliado Expert</span>
+              <span className="inline-flex rounded-full bg-white/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[.08em] text-white">Inclusa a partir do Afiliado Expert</span>
               <h2 className="mt-4 font-heading text-[clamp(1.25rem,5.2vw,1.875rem)] font-semibold leading-tight text-white">
                 <span className="block sm:whitespace-nowrap">Não encontrou sua cidade?</span>
                 <span className="mt-1 block sm:whitespace-nowrap">Nós homologamos para você.</span>

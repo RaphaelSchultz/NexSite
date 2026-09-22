@@ -1,7 +1,7 @@
 {
   "name": "NexNotas",
   "short_name": "NexNotas",
-  "description": "Emissão de NFS-e pelo Emissor Nacional em uma experiência mobile segura.",
+  "description": "Emissão de NFS-e pelo Emissor Nacional em uma experiência móvel segura.",
   "start_url": "/app",
   "scope": "/",
   "display": "standalone",

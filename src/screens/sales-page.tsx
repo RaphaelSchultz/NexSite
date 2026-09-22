@@ -112,7 +112,7 @@ const plans: Plan[] = [
     price: 97,
     invoices: 4000,
     companies: 1,
-    description: "Para afiliados que querem tirar a emissão do manual.",
+    description: "Para afiliados que querem eliminar a emissão manual.",
     support: "WhatsApp",
   },
   {
@@ -519,7 +519,7 @@ export function SalesPage() {
                   ["Emissão", "repetitiva", "processamento em lote"],
                   ["Duplicidade", "depende da memória", "alerta por competência"],
                   ["Rejeições", "procurar onde falhou", "motivo e próxima ação"],
-                  ["Arquivos", "pastas e downloads", "histórico PDF/XML"],
+                  ["Arquivos", "pastas e arquivos baixados", "histórico PDF/XML"],
                 ].map(([stepName, manual, nex]) => (
                   <div key={stepName} className="grid grid-cols-[1fr_1fr_1fr] border-b border-[#eef0f4] text-[13px] last:border-b-0">
                     <div className="px-3 py-3 font-medium text-[#344054]">{stepName}</div>
@@ -535,7 +535,7 @@ export function SalesPage() {
         <section id="como-funciona" className="sales-steps sales-reveal bg-white py-24">
               <SectionHeading kicker="Como funciona" title="Do CSV ao lote emitido, sem retrabalho" text="Um fluxo simples para importar, revisar e emitir com segurança." center />
           <div className="mx-auto mt-12 grid max-w-5xl gap-5 px-5 md:grid-cols-3">
-            <StepCard icon={UploadCloud} n="1" title="Importe o CSV da Shopee" text="Suba o relatório mensal com vendedores, valores e competência." />
+            <StepCard icon={UploadCloud} n="1" title="Importe o CSV da Shopee" text="Envie o relatório mensal com vendedores, valores e competência." />
             <StepCard icon={FileSpreadsheet} n="2" title="Revise a prévia do lote" text="Veja quantidade de notas, total, duplicidades e linhas que precisam de atenção." />
             <StepCard icon={FileCheck2} n="3" title="Emita e organize tudo" text="Acompanhe as notas autorizadas e mantenha PDF, XML e histórico em um único painel." />
           </div>
@@ -554,7 +554,7 @@ export function SalesPage() {
         </section>
 
         <section id="simulacao" className="sales-upload sales-reveal bg-white py-24">
-          <SectionHeading kicker="Simulador de emissão em lote Shopee" title="Simulação de Espelho de Nota Fiscal" text="Arraste seu relatório .csv para ver o espelho da nota fiscal gerada por vendedor único." center />
+          <SectionHeading kicker="Simulador de emissão em lote Shopee" title="Simulação do espelho da nota fiscal" text="Arraste seu relatório CSV para ver o espelho da nota fiscal gerada para cada vendedor único." center />
           <div className="mx-auto mt-10 max-w-5xl px-5">
             <input
               id="csv-simulator-file"
@@ -610,7 +610,7 @@ export function SalesPage() {
                 <SimMeta label="Nº da nota fiscal" value="2026.0731-NFS-e" />
                 <SimMeta label="Emissão" value="Lote automatizado" />
                 <SimMeta label="Regime fiscal" value="Simples Nacional / ME" />
-                <SimMeta label="Arquivo origem" value={simulation.source} accent />
+                <SimMeta label="Arquivo de origem" value={simulation.source} accent />
               </div>
               <div className="mt-5 grid gap-4 md:grid-cols-2">
                 <div className="rounded-[12px] border border-[#e5e8f0] bg-[#fbfcfe] p-4">
@@ -619,7 +619,7 @@ export function SalesPage() {
                   <p className="mt-2 text-xs leading-5 text-[#667085]">Serviço: intermediação de negócios e promoção de vendas na internet.</p>
                 </div>
                 <div className="rounded-[12px] border border-[#e5e8f0] bg-[#fbfcfe] p-4">
-                  <p className="text-[11px] font-bold uppercase tracking-[.08em] text-[#667085]">Tomadores dos serviços</p>
+                  <p className="text-[11px] font-bold uppercase tracking-[.08em] text-[#667085]">Tomadores de serviços</p>
                   <h4 className="mt-2 font-heading text-sm font-semibold text-[#061747]">{number.format(simulation.count)} vendedores únicos identificados</h4>
                   <p className="mt-2 text-xs leading-5 text-[#667085]">Uma nota por loja única, organizada a partir do relatório.</p>
                 </div>
@@ -645,7 +645,7 @@ export function SalesPage() {
                     </div>
                   ))}
                   <div className="flex flex-wrap items-center justify-between gap-3 bg-[#f7f8ff] px-4 py-3 text-xs font-semibold">
-                    <span className="text-[#4f56f6]">+ E mais {Math.max(simulation.count - simulation.rows.length, 0)} lojas únicas mapeadas no relatório...</span>
+                    <span className="text-[#4f56f6]">Mais {Math.max(simulation.count - simulation.rows.length, 0)} lojas únicas mapeadas no relatório...</span>
                     <span className="text-[#16803c]">100% organizado em lote</span>
                   </div>
                 </div>
@@ -658,8 +658,8 @@ export function SalesPage() {
               <div className="mt-5 rounded-[14px] bg-[#4f56f6] p-5 text-white shadow-[0_16px_35px_rgba(79,86,246,.22)]">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <span className="rounded-full bg-white/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[.08em]">Emissão oficial em lote Nex Notas</span>
-                    <h4 className="mt-3 font-heading text-2xl font-semibold text-white">Emitir todas as {number.format(simulation.count)} notas fiscais em 1 clique</h4>
+                    <span className="rounded-full bg-white/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[.08em]">Emissão oficial em lote da Nex Notas</span>
+                    <h4 className="mt-3 font-heading text-2xl font-semibold text-white">Emitir todas as {number.format(simulation.count)} notas fiscais com um clique</h4>
                     <p className="mt-1 text-sm text-white/85">Envio organizado para emissão, sem digitação manual.</p>
                   </div>
                   <a className="shrink-0" href="#planos"><Button className="rounded-[10px] bg-white text-[#061747] hover:bg-[#f7f8ff]">Emitir lote na Nex Notas <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
@@ -696,7 +696,7 @@ export function SalesPage() {
                 <div className="grid gap-3 sm:grid-cols-3">
                   <CoverageStep icon={Search} title="Cidade" text="confira antes" />
                   <CoverageStep icon={Building2} title="Porte" text="MEI ou empresa" />
-                  <CoverageStep icon={ShieldCheck} title="Plano" text="avance seguro" />
+                  <CoverageStep icon={ShieldCheck} title="Plano" text="avance com segurança" />
                 </div>
               </div>
               <div className="mt-5 rounded-[16px] border border-[#4f56f6]/35 bg-[#4f56f6]/10 p-4">
@@ -742,7 +742,7 @@ export function SalesPage() {
                 onClick={() => setBilling("annual")}
               >
                 Anual
-                <span className={cn("rounded-full px-2 py-1 text-[10px] font-bold leading-none", billing === "annual" ? "bg-[#4f56f6] text-white" : "bg-[#10b981] text-white")}>16,7% off</span>
+                <span className={cn("rounded-full px-2 py-1 text-[10px] font-bold leading-none", billing === "annual" ? "bg-[#4f56f6] text-white" : "bg-[#10b981] text-white")}>16,7% de desconto</span>
               </button>
             </div>
           </div>
@@ -836,8 +836,8 @@ export function SalesPage() {
             </div>
             <div className="rounded-[12px] border border-[#e6e8ee] bg-white">
               {[
-                ["A Nex Notas emite a partir do relatório da Shopee?", "Sim. Você importa o relatório mensal, revisa a prévia e transforma cada vendedor em uma NFS-e organizada no mesmo lote."],
-                ["Consigo evitar nota duplicada?", "Sim. A prévia destaca possíveis duplicidades antes da emissão para você não pagar com retrabalho depois."],
+                ["A Nex Notas emite a partir do relatório da Shopee?", "Sim. Você importa o relatório mensal, revisa a prévia e gera uma NFS-e para cada vendedor, tudo organizado no mesmo lote."],
+                ["Consigo evitar nota duplicada?", "Sim. A prévia destaca possíveis duplicidades antes da emissão para evitar retrabalho depois."],
                 ["Preciso emitir uma nota para cada vendedor?", "Para a comissão extra, o novo modelo exige uma NFS-e por vendedor que pagou comissão. A Nex Notas foi criada para tirar esse volume da emissão manual."],
                 ["O que acontece quando eu atinjo o limite do plano?", "Seu histórico continua disponível. Para novas emissões, basta evoluir para a próxima faixa."],
                 ["Posso usar mais de uma empresa?", "Sim. Os planos Afiliado Expert e Top Afiliado permitem até 2 empresas cadastradas. Grátis, Basic e Profissional permitem 1 empresa cadastrada."],
