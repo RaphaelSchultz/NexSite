@@ -151,7 +151,7 @@ export function MunicipalitiesPage() {
   const municipalitiesByRegime = useMemo(() => {
     const municipalities: Record<Regime, Municipality[]> = { geral: [], mei: [] };
     for (const municipality of data?.municipios ?? []) {
-      if (municipality.regimeGeralDisponivel) municipalities.geral.push(municipality);
+      municipalities.geral.push(municipality);
       if (municipality.meiDisponivel) municipalities.mei.push(municipality);
     }
     municipalities.geral.sort((a, b) => collator.compare(a.nome, b.nome));
@@ -159,7 +159,7 @@ export function MunicipalitiesPage() {
     return municipalities;
   }, [data]);
 
-  const availableMunicipalities = municipalitiesByRegime[regime];
+  const municipalitiesForRegime = municipalitiesByRegime[regime];
 
   const municipalitySearchIndex = useMemo(() => {
     const index = new Map<string, string>();
@@ -171,12 +171,12 @@ export function MunicipalitiesPage() {
 
   const filteredMunicipalities = useMemo(() => {
     const normalizedQuery = normalize(deferredQuery.trim());
-    return availableMunicipalities.filter((municipality) => {
+    return municipalitiesForRegime.filter((municipality) => {
       if (deferredUf && municipality.uf !== deferredUf) return false;
       if (!normalizedQuery) return true;
       return municipalitySearchIndex.get(municipality.codigoIbge)?.includes(normalizedQuery);
     });
-  }, [availableMunicipalities, deferredQuery, deferredUf, municipalitySearchIndex]);
+  }, [municipalitiesForRegime, deferredQuery, deferredUf, municipalitySearchIndex]);
 
   const searching = Boolean(deferredQuery.trim());
 
@@ -195,6 +195,7 @@ export function MunicipalitiesPage() {
   const totalForRegime = regime === "mei"
     ? data?.meta.totalMeiDisponivel ?? 0
     : data?.meta.totalRegimeGeralDisponivel ?? 0;
+  const totalFreeIntegrations = Math.max(0, (data?.meta.totalMunicipios ?? 0) - (data?.meta.totalRegimeGeralDisponivel ?? 0));
 
   const toggleState = (state: string) => {
     setOpenStates((current) => {
@@ -297,7 +298,10 @@ export function MunicipalitiesPage() {
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[#eef0f5] pt-4 text-sm">
                 <div className="flex items-center gap-2 text-[#667085]">
                   <CircleCheck className="h-4 w-4 text-[#4f56f6]" />
-                  <span><strong className="text-[#243150]">{numberFormatter.format(totalForRegime)}</strong> municípios atendidos para {regime === "mei" ? "MEI" : "empresas"}</span>
+                  <span>
+                    <strong className="text-[#243150]">{numberFormatter.format(totalForRegime)}</strong> municípios atendidos para {regime === "mei" ? "MEI" : "empresas"}
+                    {regime === "geral" ? <> · <strong className="text-[#a96500]">{numberFormatter.format(totalFreeIntegrations)}</strong> com integração gratuita</> : null}
+                  </span>
                 </div>
                 {data?.meta.fonteNacional ? (
                   <a href={data.meta.fonteNacional} target="_blank" rel="noreferrer" className="text-xs font-semibold text-[#5961e9] hover:underline">Ver referência oficial</a>
@@ -324,7 +328,7 @@ export function MunicipalitiesPage() {
                 </div>
                 {searchResults.length ? (
                   <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {searchResults.map((municipality) => <MunicipalityCard key={municipality.codigoIbge} municipality={municipality} />)}
+                    {searchResults.map((municipality) => <MunicipalityCard key={municipality.codigoIbge} municipality={municipality} regime={regime} />)}
                   </div>
                 ) : <EmptyState />}
               </div>
@@ -346,7 +350,7 @@ export function MunicipalitiesPage() {
                       {open ? (
                         <div className="border-t border-[#eef0f5] bg-[#fbfcff] p-4">
                           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                            {visibleMunicipalities.map((municipality) => <MunicipalityCard key={municipality.codigoIbge} municipality={municipality} compact />)}
+                            {visibleMunicipalities.map((municipality) => <MunicipalityCard key={municipality.codigoIbge} municipality={municipality} regime={regime} compact />)}
                           </div>
                           {visibleCount < municipalities.length ? (
                             <div className="mt-4 flex justify-center">
@@ -429,11 +433,19 @@ function RegimeButton({ active, onClick, icon: Icon, children }: { active: boole
   return <button type="button" onClick={onClick} className={`flex flex-1 items-center justify-center gap-2 rounded-[8px] px-5 py-2.5 text-sm font-semibold transition sm:flex-none ${active ? "bg-white text-[#4f56f6] shadow-sm" : "text-[#667085] hover:text-[#344054]"}`}><Icon className="h-4 w-4" />{children}</button>;
 }
 
-const MunicipalityCard = memo(function MunicipalityCard({ municipality, compact = false }: { municipality: Municipality; compact?: boolean }) {
+const MunicipalityCard = memo(function MunicipalityCard({ municipality, regime, compact = false }: { municipality: Municipality; regime: Regime; compact?: boolean }) {
+  const available = regime === "mei" ? municipality.meiDisponivel : municipality.regimeGeralDisponivel;
   return (
     <article className={`[content-visibility:auto] [contain-intrinsic-size:76px] rounded-[11px] border border-[#e5e8f1] bg-white ${compact ? "p-3.5" : "p-4"}`}>
-      <div className="flex items-start justify-between gap-3"><div><h3 className="font-semibold text-[#243150]">{municipality.nome}</h3><p className="mt-1 text-xs text-[#8a94a7]">{municipality.uf} · IBGE {municipality.codigoIbge}</p></div><span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#edf9f2] px-2 py-1 text-[10px] font-bold text-[#287a4d]"><Check className="h-3 w-3" /> Disponível</span></div>
-      {!compact ? <p className="mt-4 text-xs font-medium text-[#667085]">{municipality.nfseNacional.emissorNacional ? "Emissor Nacional" : "Cobertura confirmada pela Nex Notas"}</p> : null}
+      <div className="flex items-start justify-between gap-3">
+        <div><h3 className="font-semibold text-[#243150]">{municipality.nome}</h3><p className="mt-1 text-xs text-[#8a94a7]">{municipality.uf} · IBGE {municipality.codigoIbge}</p></div>
+        {available ? (
+          <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-[#edf9f2] px-2 py-1 text-[10px] font-bold text-[#287a4d]"><Check className="h-3 w-3" /> Disponível</span>
+        ) : (
+          <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-[#fff7e6] px-2 py-1 text-[10px] font-bold text-[#a96500]"><ShieldCheck className="h-3 w-3" /> Integração gratuita</span>
+        )}
+      </div>
+      {!compact ? <p className="mt-4 text-xs font-medium text-[#667085]">{available ? (municipality.nfseNacional.emissorNacional ? "Emissor Nacional" : "Cobertura confirmada pela Nex Notas") : "Homologação incluída nos planos Afiliado Expert e Top Afiliado."}</p> : null}
     </article>
   );
 });
