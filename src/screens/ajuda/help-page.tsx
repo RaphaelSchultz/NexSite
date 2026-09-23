@@ -26,7 +26,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useMemo, useState, type CSSProperties } from "react";
-import { Button } from "../../components/ui/button";
+import { Button, buttonVariants } from "../../components/ui/button";
 import { openCookiePreferences } from "../../components/cookie-consent";
 import { Input } from "../../components/ui/input";
 import { cn } from "../../lib/utils";
@@ -938,9 +938,7 @@ function HelpHub() {
               <Sparkles className="relative h-6 w-6 text-[#4f56f6]" />
               <strong className="relative mt-4 block text-base text-[#172650]">Ganhe indicando o Nex Notas</strong>
               <p className="relative mt-2 text-sm leading-6 text-[#667085]">Participe do programa de afiliados e receba 20% de comissão recorrente sobre assinaturas válidas.</p>
-              <Link className="relative mt-4 block sm:inline-flex" to="/programa-de-afiliados">
-                <Button className="w-full gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0] sm:w-auto">Simular comissão <ArrowUpRight className="h-4 w-4" /></Button>
-              </Link>
+              <Link className={cn(buttonVariants(), "relative mt-4 flex w-full gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0] sm:inline-flex sm:w-auto")} to="/programa-de-afiliados">Simular comissão <ArrowUpRight className="h-4 w-4" /></Link>
             </div>
           </div>
         </section>
@@ -1064,9 +1062,7 @@ function GuidePage({ guide }: { guide: HelpGuide }) {
             <div className="rounded-[16px] border border-[#e2e6ef] bg-white p-5">
               <h2 className="font-heading text-lg font-semibold text-[#061747]">Abrir no app</h2>
               <p className="mt-2 text-sm leading-6 text-[#667085]">Para executar a ação, entre no painel e abra sua empresa, lote ou nota.</p>
-              <a className="mt-4 block" href={appUrl}>
-                <Button className="w-full gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Entrar no app <ArrowRight className="h-4 w-4" /></Button>
-              </a>
+              <Button href={appUrl} className="mt-4 w-full gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Entrar no app <ArrowRight className="h-4 w-4" /></Button>
             </div>
             <div className="mt-4 rounded-[16px] border border-[#e2e6ef] bg-white p-5">
               <h2 className="font-heading text-lg font-semibold text-[#061747]">Guias relacionados</h2>
@@ -1141,9 +1137,7 @@ function AffiliateProgramPage() {
                 <TrendingUp className="h-6 w-6 text-[#4f56f6]" />
                 <h2 className="mt-4 font-heading text-lg font-semibold text-[#061747]">Entrar no programa</h2>
                 <p className="mt-2 text-sm leading-6 text-[#667085]">O cadastro, o link de divulgação e os pagamentos são gerenciados pela Cakto.</p>
-                <a className="mt-4 block sm:inline-flex" href={affiliateUrl} target="_blank" rel="noreferrer">
-                  <Button className="w-full gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0] sm:w-auto">Quero me afiliar <ArrowUpRight className="h-4 w-4" /></Button>
-                </a>
+                <Button href={affiliateUrl} target="_blank" rel="noreferrer" className="mt-4 w-full gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0] sm:inline-flex sm:w-auto">Quero me afiliar <ArrowUpRight className="h-4 w-4" /></Button>
               </div>
               <div className="rounded-[16px] border border-[#e2e6ef] bg-white p-5">
                 <h2 className="font-heading text-lg font-semibold text-[#061747]">Resumo da regra</h2>
@@ -1324,9 +1318,7 @@ function ErrorPage({ error }: { error: FiscalError }) {
             <div className="rounded-[16px] border border-[#e2e6ef] bg-white p-5">
               <h2 className="font-heading text-lg font-semibold text-[#061747]">Resolver no app</h2>
               <p className="mt-2 text-sm leading-6 text-[#667085]">Abra a nota ou o lote para ver a mensagem completa, corrigir os dados e reprocessar quando for seguro.</p>
-              <a className="mt-4 block" href={appUrl}>
-                <Button className="w-full gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Acessar minha conta <ArrowUpRight className="h-4 w-4" /></Button>
-              </a>
+              <Button href={appUrl} className="mt-4 w-full gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Acessar minha conta <ArrowUpRight className="h-4 w-4" /></Button>
             </div>
             {related?.length ? (
               <div className="mt-4 rounded-[16px] border border-[#e2e6ef] bg-white p-5">
@@ -1357,9 +1349,7 @@ function NotFoundError({ code }: { code: string }) {
         <XCircle className="mx-auto h-10 w-10 text-[#b42318]" />
         <h1 className="mt-5 font-heading text-3xl font-semibold text-[#061747]">Erro não encontrado</h1>
         <p className="mt-3 text-sm leading-7 text-[#667085]">Não encontramos uma explicação para {decodeURIComponent(code)}. Use a central de ajuda para buscar pelo código, mensagem ou assunto relacionado.</p>
-        <Link className="mt-6 inline-flex" to="/ajuda">
-          <Button className="gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]"><ArrowLeft className="h-4 w-4" /> Voltar para ajuda</Button>
-        </Link>
+        <Link className={cn(buttonVariants(), "mt-6 inline-flex gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]")} to="/ajuda"><ArrowLeft className="h-4 w-4" /> Voltar para ajuda</Link>
       </main>
       <HelpFooter />
     </div>
@@ -1374,9 +1364,7 @@ function NotFoundGuide({ slug }: { slug: string }) {
         <XCircle className="mx-auto h-10 w-10 text-[#b42318]" />
         <h1 className="mt-5 font-heading text-3xl font-semibold text-[#061747]">Guia não encontrado</h1>
         <p className="mt-3 text-sm leading-7 text-[#667085]">Não encontramos um guia em /ajuda/{slug}. Use a central de ajuda para buscar por categoria, erro ou palavra-chave.</p>
-        <Link className="mt-6 inline-flex" to="/ajuda">
-          <Button className="gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]"><ArrowLeft className="h-4 w-4" /> Voltar para ajuda</Button>
-        </Link>
+        <Link className={cn(buttonVariants(), "mt-6 inline-flex gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]")} to="/ajuda"><ArrowLeft className="h-4 w-4" /> Voltar para ajuda</Link>
       </main>
       <HelpFooter />
     </div>
@@ -1395,9 +1383,7 @@ function HelpHeader() {
           <a className="transition hover:text-[#4f56f6]" href="/#planos">Planos</a>
           <Link className="text-[#4f56f6]" to="/ajuda">Ajuda</Link>
         </nav>
-        <a href={appUrl}>
-          <Button variant="ghost" className="h-9 rounded-[10px] px-2 text-[#344054] hover:bg-[#f7f8ff] hover:text-[#061747] sm:px-3">Entrar</Button>
-        </a>
+        <Button href={appUrl} variant="ghost" className="h-9 rounded-[10px] px-2 text-[#344054] hover:bg-[#f7f8ff] hover:text-[#061747] sm:px-3">Entrar</Button>
       </div>
     </header>
   );

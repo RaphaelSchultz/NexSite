@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
   BadgeCheck,
@@ -143,6 +143,10 @@ const signupUrl = "https://app.nexnotas.com.br/criar-conta";
 const coverageApiUrl = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? "https://app.nexnotas.com.br/api/v1/referencias/municipios-atendidos?limite=6000"
   : "/api/municipios-atendidos";
+const coverageCollator = new Intl.Collator("pt-BR", { sensitivity: "base" });
+const citySearchResultLimit = 60;
+let salesCityCatalogCache: CityCoverage[] | null = null;
+let salesCityCatalogRequest: Promise<CityCoverage[]> | null = null;
 
 const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 const normalizeSearch = (value: string) => normalize(value).replace(/[^a-z0-9]+/g, " ").trim();
@@ -159,6 +163,26 @@ function cityFromNexCoverage(item: NexCoverageCity): CityCoverage {
       ? "Cidade disponível para contratação no regime geral."
       : item.motivoRegimeGeralIndisponivel?.mensagem ?? "Ainda não atendemos esta cidade para empresas do regime geral.",
   };
+}
+
+function fetchSalesCityCatalog() {
+  if (salesCityCatalogCache) return Promise.resolve(salesCityCatalogCache);
+  if (!salesCityCatalogRequest) {
+    salesCityCatalogRequest = fetch(coverageApiUrl, { headers: { Accept: "application/json" } })
+      .then((response) => response.ok ? response.json() as Promise<NexCoverageResponse> : Promise.reject(new Error("Cobertura indisponível")))
+      .then((response) => {
+        const cities = (response.municipios ?? [])
+          .map(cityFromNexCoverage)
+          .sort((a, b) => coverageCollator.compare(a.city, b.city));
+        salesCityCatalogCache = cities;
+        return cities;
+      })
+      .catch((cause) => {
+        salesCityCatalogRequest = null;
+        throw cause;
+      });
+  }
+  return salesCityCatalogRequest;
 }
 
 function findCity(city: string, uf: string | undefined, catalog: CityCoverage[]) {
@@ -279,6 +303,7 @@ export function SalesPage() {
   const [cityQuery, setCityQuery] = useState("São Paulo");
   const [selectedCity, setSelectedCity] = useState<CityCoverage | null>(null);
   const [cityCatalog, setCityCatalog] = useState<CityCoverage[]>([]);
+  const [cityCatalogLoading, setCityCatalogLoading] = useState(false);
   const [billing, setBilling] = useState<Billing>("monthly");
   const [volume, setVolume] = useState(6750);
   const [uploadedFileName, setUploadedFileName] = useState("Nenhum arquivo selecionado");
@@ -325,22 +350,36 @@ export function SalesPage() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    let canceled = false;
-    fetch(coverageApiUrl, { headers: { Accept: "application/json" } })
-      .then((response) => response.ok ? response.json() as Promise<NexCoverageResponse> : Promise.reject(new Error("Cobertura indisponível")))
-      .then((response) => {
-        if (canceled) return;
-        const cities = response.municipios
-          ?.map(cityFromNexCoverage)
-          .sort((a, b) => a.city.localeCompare(b.city, "pt-BR", { sensitivity: "base" }));
-        if (!cities?.length) return;
+  const loadCityCatalog = useCallback(() => {
+    if (salesCityCatalogCache) {
+      setCityCatalog(salesCityCatalogCache);
+      return;
+    }
+    setCityCatalogLoading(true);
+    void fetchSalesCityCatalog()
+      .then((cities) => {
+        if (!cities.length) return;
         setCityCatalog(cities);
         setSelectedCity((current) => current ? findCity(current.city, current.uf, cities) ?? current : current);
       })
-      .catch(() => undefined);
-    return () => { canceled = true; };
+      .catch(() => undefined)
+      .finally(() => setCityCatalogLoading(false));
   }, []);
+
+  useEffect(() => {
+    const coverageSection = document.getElementById("cobertura");
+    if (!coverageSection || !("IntersectionObserver" in window)) {
+      loadCityCatalog();
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      loadCityCatalog();
+      observer.disconnect();
+    }, { rootMargin: "600px 0px" });
+    observer.observe(coverageSection);
+    return () => observer.disconnect();
+  }, [loadCityCatalog]);
 
   useEffect(() => {
     if (!cityCatalog.length) return;
@@ -357,21 +396,27 @@ export function SalesPage() {
     return () => { canceled = true; };
   }, [cityCatalog]);
 
+  const deferredCityQuery = useDeferredValue(cityQuery);
+  const citySearchIndex = useMemo(() => cityCatalog.map((city) => ({
+    city,
+    searchable: normalizeSearch(`${city.city} ${city.uf} ${city.ibge ?? ""}`),
+  })), [cityCatalog]);
+
   const matchingCities = useMemo(() => {
-    const query = normalizeSearch(cityQuery);
-    if (!query) return cityCatalog;
+    const query = normalizeSearch(deferredCityQuery);
+    if (!query) return [];
     const terms = query.split(/\s+/);
-    return cityCatalog
-      .filter((item) => {
-        const searchable = normalizeSearch(`${item.city} ${item.uf} ${item.ibge ?? ""}`);
-        return terms.every((term) => searchable.includes(term));
-      });
-  }, [cityCatalog, cityQuery]);
+    return citySearchIndex
+      .filter((item) => terms.every((term) => item.searchable.includes(term)))
+      .slice(0, citySearchResultLimit)
+      .map((item) => item.city);
+  }, [citySearchIndex, deferredCityQuery]);
 
   const recommendedPlan = useMemo(() => plans.find((plan) => plan.unlimitedInvoices || volume <= plan.invoices) ?? plans[plans.length - 1], [volume]);
   const volumePercent = Math.min(Math.max((volume - 50) / (20000 - 50) * 100, 0), 100);
 
   const openGate = (plan: Plan) => {
+    loadCityCatalog();
     setSelectedPlan(plan);
     setKind(null);
     setStep(1);
@@ -380,6 +425,7 @@ export function SalesPage() {
   };
 
   const openCityChanger = () => {
+    loadCityCatalog();
     setSelectedPlan(plans[1]);
     setKind("empresa");
     setStep(2);
@@ -448,7 +494,7 @@ export function SalesPage() {
             <a href="/ajuda" className="transition hover:text-[#4f56f6]">Ajuda</a>
           </nav>
           <div className="flex items-center gap-2">
-            <a href="https://app.nexnotas.com.br/entrar"><Button variant="ghost" className="hidden text-[#344054] sm:inline-flex">Entrar</Button></a>
+            <Button href="https://app.nexnotas.com.br/entrar" variant="ghost" className="hidden text-[#344054] sm:inline-flex">Entrar</Button>
           </div>
         </div>
       </header>
@@ -470,8 +516,8 @@ export function SalesPage() {
               </div>
               <ProductWindow />
               <div className="sales-hero-actions mt-7 flex flex-wrap justify-center gap-3">
-                <a href="#planos"><Button size="lg" className="gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Emitir minhas notas <ArrowRight className="h-4 w-4" /></Button></a>
-                <a href="#simulacao"><Button size="lg" variant="outline" className="gap-2 rounded-[10px] border-[#e3e6ed] bg-white text-[#344054] hover:bg-[#f7f8fc]">Simular relatório <FileSpreadsheet className="h-4 w-4" /></Button></a>
+                <Button href="#planos" size="lg" className="gap-2 rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Emitir minhas notas <ArrowRight className="h-4 w-4" /></Button>
+                <Button href="#simulacao" size="lg" variant="outline" className="gap-2 rounded-[10px] border-[#e3e6ed] bg-white text-[#344054] hover:bg-[#f7f8fc]">Simular relatório <FileSpreadsheet className="h-4 w-4" /></Button>
               </div>
               <div className="mt-3 flex flex-wrap justify-center gap-2">
                 {["Relatório da Shopee", "Emissão em lote", "PDF + XML", "Evita duplicidade", "Histórico por competência"].map((item) => (
@@ -539,7 +585,7 @@ export function SalesPage() {
             <StepCard icon={FileSpreadsheet} n="2" title="Revise a prévia do lote" text="Veja quantidade de notas, total, duplicidades e linhas que precisam de atenção." />
             <StepCard icon={FileCheck2} n="3" title="Emita e organize tudo" text="Acompanhe as notas autorizadas e mantenha PDF, XML e histórico em um único painel." />
           </div>
-          <div className="mt-10 text-center"><a href="#planos"><Button className="rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Quero emitir em lote <ArrowRight className="ml-2 h-4 w-4" /></Button></a></div>
+          <div className="mt-10 text-center"><Button href="#planos" className="rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Quero emitir em lote <ArrowRight className="ml-2 h-4 w-4" /></Button></div>
         </section>
 
         <section id="produto" className="sales-product sales-reveal border-y border-[#f0f2f6] bg-[#fbfcfe] py-24">
@@ -662,7 +708,7 @@ export function SalesPage() {
                     <h4 className="mt-3 font-heading text-2xl font-semibold text-white">Emitir todas as {number.format(simulation.count)} notas fiscais com um clique</h4>
                     <p className="mt-1 text-sm text-white/85">Envio organizado para emissão, sem digitação manual.</p>
                   </div>
-                  <a className="shrink-0" href="#planos"><Button className="rounded-[10px] bg-white text-[#061747] hover:bg-[#f7f8ff]">Emitir lote na Nex Notas <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
+                  <Button href="#planos" className="shrink-0 rounded-[10px] bg-white text-[#061747] hover:bg-[#f7f8ff]">Emitir lote na Nex Notas <ArrowRight className="ml-2 h-4 w-4" /></Button>
                 </div>
               </div>
             </div>
@@ -720,7 +766,7 @@ export function SalesPage() {
                 ))}
               </div>
               <div className="mt-7 flex flex-wrap gap-3">
-                <a href="#planos"><Button className="rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Ver planos</Button></a>
+                <Button href="#planos" className="rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Ver planos</Button>
                 <button className="inline-flex h-10 items-center gap-2 rounded-[10px] border border-white/15 px-4 text-sm font-semibold text-white" onClick={openCityChanger}><Search className="h-4 w-4" />Trocar cidade</button>
               </div>
             </div>
@@ -817,7 +863,7 @@ export function SalesPage() {
               <div className="mt-6 grid gap-3 text-sm text-white/80">
                 {["Emita mais notas sem aumentar o trabalho operacional", "Tenha documentos prontos para consulta e conferência", "Cresça com mais empresas e volume quando precisar"].map((text) => <div key={text} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 text-[#8b93ff]" />{text}</div>)}
               </div>
-              <div className="mt-8 flex flex-wrap gap-3"><a href="#planos"><Button className="rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Começar agora</Button></a><a href="#faq"><Button variant="outline" className="rounded-[10px] border-white/15 bg-transparent text-white hover:border-white/25 hover:bg-white/10 hover:text-white">Tirar dúvidas</Button></a></div>
+              <div className="mt-8 flex flex-wrap gap-3"><Button href="#planos" className="rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Começar agora</Button><Button href="#faq" variant="outline" className="rounded-[10px] border-white/15 bg-transparent text-white hover:border-white/25 hover:bg-white/10 hover:text-white">Tirar dúvidas</Button></div>
             </div>
           </div>
         </section>
@@ -860,7 +906,7 @@ export function SalesPage() {
               <h2 className="max-w-2xl font-heading text-[32px] font-semibold leading-[1.22] tracking-[-.028em] text-white">Pare de virar o mês preso emitindo nota por nota.</h2>
               <p className="mt-3 max-w-xl text-[15px] leading-[1.65] text-[#f1f3ff]">Suba o relatório da Shopee, confira a prévia e avance para uma emissão em lote organizada. Mais tempo para vender, menos tempo repetindo tarefa fiscal.</p>
             </div>
-            <div className="flex shrink-0"><a href="#planos"><Button className="rounded-[10px] bg-white text-[#4f56f6] hover:bg-[#f7f8ff]">Escolher plano</Button></a></div>
+            <div className="flex shrink-0"><Button href="#planos" className="rounded-[10px] bg-white text-[#4f56f6] hover:bg-[#f7f8ff]">Escolher plano</Button></div>
           </div>
         </section>
       </main>
@@ -919,7 +965,11 @@ export function SalesPage() {
                           <Input id="city-check" className="pl-9" value={cityQuery} placeholder="Digite o nome da sua cidade..." onChange={(event) => { setCityQuery(event.target.value); setSelectedCity(null); }} />
                         </div>
                         <div className="mt-2 max-h-[260px] overflow-y-auto rounded-[10px] border border-[#e6e9ef] bg-white">
-                          {matchingCities.length ? matchingCities.map((city) => (
+                          {cityCatalogLoading ? (
+                            <div className="flex items-center justify-center gap-2 p-5 text-sm text-[#667085]"><RefreshCw className="h-4 w-4 animate-spin" />Carregando municípios…</div>
+                          ) : !deferredCityQuery.trim() ? (
+                            <div className="p-5 text-center text-sm text-[#667085]">Digite o nome, a UF ou o código IBGE do município.</div>
+                          ) : matchingCities.length ? matchingCities.map((city) => (
                             <button key={`${city.city}-${city.uf}`} className={cn("flex w-full items-center justify-between gap-3 border-b border-[#eaecf0] px-3 py-3 text-left last:border-b-0 hover:bg-[#fbfcfe]", selectedCity?.city === city.city && selectedCity.uf === city.uf && "bg-[#f4f5ff]")} onClick={() => { setSelectedCity(city); setCityQuery(`${city.city} / ${city.uf}`); setEditingCity(false); }}>
                               <span className="min-w-0"><strong className="block truncate text-sm">{city.city}</strong><span className="text-xs font-semibold text-[#98a2b3]">{city.uf}</span></span>
                               <CoverageBadge city={city} kind={kind} plan={selectedPlan} />

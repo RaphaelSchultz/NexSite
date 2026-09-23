@@ -146,8 +146,8 @@ export function CookieConsent() {
       </Dialog>
 
       {preferences === null && !settingsOpen ? (
-        <div className="fixed inset-0 z-40 bg-[#061747]/35 backdrop-blur-[2px]">
-          <div className="fixed bottom-5 left-1/2 w-[calc(100%-24px)] max-w-3xl -translate-x-1/2 rounded-[18px] border border-white/40 bg-white/90 p-5 text-center shadow-[0_28px_80px_rgba(6,23,71,.24)] backdrop-blur-xl sm:p-6">
+        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center p-3 sm:p-5" role="region" aria-label="Preferências de cookies">
+          <div className="pointer-events-auto w-full max-w-3xl rounded-[18px] border border-[#dfe3f2] bg-white/95 p-5 text-center shadow-[0_28px_80px_rgba(6,23,71,.24)] backdrop-blur-xl sm:p-6">
             <strong className="inline-flex items-center justify-center gap-2 font-heading text-xl font-semibold text-[#061747]">
               <span className="text-[18px] leading-none" aria-hidden="true">🍪</span>
               Política de cookies

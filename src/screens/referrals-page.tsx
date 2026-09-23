@@ -42,9 +42,7 @@ export function ReferralsPage() {
             <a className="transition hover:text-[#4f56f6]" href="/#planos">Planos</a>
             <a className="transition hover:text-[#4f56f6]" href="/#faq">FAQ</a>
           </nav>
-          <a href="https://app.nexnotas.com.br/entrar">
-            <Button variant="ghost" className="rounded-[10px] text-[#344054] hover:bg-[#f7f8ff] hover:text-[#061747]">Entrar</Button>
-          </a>
+          <Button href="https://app.nexnotas.com.br/entrar" variant="ghost" className="rounded-[10px] text-[#344054] hover:bg-[#f7f8ff] hover:text-[#061747]">Entrar</Button>
         </div>
       </header>
 
@@ -64,16 +62,12 @@ export function ReferralsPage() {
                 Ajude afiliados Shopee PJ a resolver a emissão de notas da Comissão Extra e receba comissão enquanto o cliente indicado mantiver a assinatura ativa.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row lg:justify-start">
-                <a href={affiliateUrl} target="_blank" rel="noreferrer">
-                  <Button size="lg" className="gap-2 rounded-[10px] bg-[#4f56f6] px-6 text-white shadow-[0_16px_36px_rgba(79,86,246,.24)] hover:bg-[#454cf0]">
-                    Quero me afiliar <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </a>
-                <a href="#regras">
-                  <Button size="lg" variant="outline" className="rounded-[10px] border-[#dfe3ea] bg-white text-[#344054] hover:bg-[#f7f8ff]">
-                    Ver regras
-                  </Button>
-                </a>
+                <Button href={affiliateUrl} target="_blank" rel="noreferrer" size="lg" className="gap-2 rounded-[10px] bg-[#4f56f6] px-6 text-white shadow-[0_16px_36px_rgba(79,86,246,.24)] hover:bg-[#454cf0]">
+                  Quero me afiliar <ArrowRight className="h-4 w-4" />
+                </Button>
+                <Button href="#regras" size="lg" variant="outline" className="rounded-[10px] border-[#dfe3ea] bg-white text-[#344054] hover:bg-[#f7f8ff]">
+                  Ver regras
+                </Button>
               </div>
               <p className="mt-5 text-sm leading-6 text-[#7a8496]">
                 Cadastro, link de indicação e pagamentos feitos pela Cakto.
@@ -170,11 +164,9 @@ export function ReferralsPage() {
             <p className="max-w-2xl text-base leading-8 text-white/70">
               Pegue seu link, divulgue para o público certo e acompanhe suas comissões recorrentes diretamente pela plataforma.
             </p>
-            <a href={affiliateUrl} target="_blank" rel="noreferrer">
-              <Button size="lg" className="gap-2 rounded-[10px] bg-white px-6 text-[#4f56f6] hover:bg-[#f4f5ff]">
-                Quero me afiliar <ArrowRight className="h-4 w-4" />
-              </Button>
-            </a>
+            <Button href={affiliateUrl} target="_blank" rel="noreferrer" size="lg" className="gap-2 rounded-[10px] bg-white px-6 text-[#4f56f6] hover:bg-[#f4f5ff]">
+              Quero me afiliar <ArrowRight className="h-4 w-4" />
+            </Button>
           </div>
         </section>
       </main>

@@ -223,8 +223,8 @@ export function MunicipalitiesPage() {
             <a href="/ajuda" className="transition hover:text-[#4f56f6]">Ajuda</a>
           </nav>
           <div className="flex items-center gap-2">
-            <a href="https://app.nexnotas.com.br/entrar"><Button variant="ghost" className="hidden text-[#344054] sm:inline-flex">Entrar</Button></a>
-            <a href="https://app.nexnotas.com.br/criar-conta"><Button className="rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Começar grátis</Button></a>
+            <Button href="https://app.nexnotas.com.br/entrar" variant="ghost" className="hidden text-[#344054] sm:inline-flex">Entrar</Button>
+            <Button href="https://app.nexnotas.com.br/criar-conta" className="rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Começar grátis</Button>
           </div>
         </div>
       </header>
@@ -400,7 +400,7 @@ export function MunicipalitiesPage() {
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-[#eef0ff]">Nos planos Afiliado Expert e Top Afiliado, nossa equipe homologa a integração com a prefeitura para empresas do regime geral, sem custo adicional.</p>
             </div>
-            <a href="https://app.nexnotas.com.br/criar-conta" className="shrink-0"><Button size="lg" className="gap-2 rounded-[10px] bg-white text-[#4f56f6] hover:bg-[#f5f6ff]">Criar conta <ArrowRight className="h-4 w-4" /></Button></a>
+            <Button href="https://app.nexnotas.com.br/criar-conta" size="lg" className="shrink-0 gap-2 rounded-[10px] bg-white text-[#4f56f6] hover:bg-[#f5f6ff]">Criar conta <ArrowRight className="h-4 w-4" /></Button>
           </div>
         </section>
       </main>

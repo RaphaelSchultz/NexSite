@@ -509,8 +509,8 @@ function LegalPage({ page }: { page: LegalPageContent }) {
                 <h2 className="font-heading text-xl font-semibold text-[#061747]">Precisa falar com a Nex Notas?</h2>
                 <p className="mt-2 text-sm leading-6 text-[#667085]">Para dúvidas sobre privacidade, termos ou proteção de dados, use os canais contato@nexnotas.com.br e dados@nexnotas.com.br.</p>
                 <div className="mt-4 flex flex-wrap gap-3">
-                  <a href="mailto:contato@nexnotas.com.br"><Button className="rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Falar com atendimento</Button></a>
-                  <Link to="/ajuda"><Button variant="outline" className="rounded-[10px] border-[#dfe3ff] bg-white text-[#344054] hover:bg-[#f7f8ff]">Ver ajuda</Button></Link>
+                  <Button href="mailto:contato@nexnotas.com.br" className="rounded-[10px] bg-[#4f56f6] hover:bg-[#454cf0]">Falar com atendimento</Button>
+                  <Button href="/ajuda" variant="outline" className="rounded-[10px] border-[#dfe3ff] bg-white text-[#344054] hover:bg-[#f7f8ff]">Ver ajuda</Button>
                 </div>
               </div>
             </article>
