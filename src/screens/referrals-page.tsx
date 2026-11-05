@@ -10,19 +10,18 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
-import { openCookiePreferences } from "../components/cookie-consent";
 
-const affiliateUrl = "https://nexnotas.com.br/indicacoes";
+const affiliateUrl = "https://app.cakto.com.br/affiliate/invite/9fe53033-1bb2-4355-8dc8-a9ce97ef1e5d";
 
 const conversionPoints = [
   "Obrigação fiscal recorrente para afiliados Shopee PJ",
   "Público fácil de encontrar em grupos, mentorias e comunidades",
   "Assinatura mensal ou anual com comissão recorrente",
-  "Preço acessível e garantia de 7 dias para o cliente",
+  "Ticket acessível e garantia de 7 dias para o cliente",
 ];
 
 const rules = [
-  "A comissão recorrente é de 20% sobre assinaturas válidas, enquanto o cliente indicado permanecer ativo e adimplente.",
+  "A comissão é de 20% recorrente sobre assinaturas válidas, enquanto o cliente indicado permanecer ativo e adimplente.",
   "O cadastro, o link de divulgação, a atribuição da venda e os pagamentos são gerenciados pela Cakto.",
   "Não faça spam, não prometa resultado financeiro e não use comunicação que pareça oficial da Shopee.",
   "Não prometa isenção de impostos. O Nex Notas organiza a emissão de NFS-e para a Comissão Extra, mas não substitui orientação contábil.",
@@ -42,7 +41,9 @@ export function ReferralsPage() {
             <a className="transition hover:text-[#4f56f6]" href="/#planos">Planos</a>
             <a className="transition hover:text-[#4f56f6]" href="/#faq">FAQ</a>
           </nav>
-          <Button href="https://app.nexnotas.com.br/entrar" variant="ghost" className="rounded-[10px] text-[#344054] hover:bg-[#f7f8ff] hover:text-[#061747]">Entrar</Button>
+          <a href="https://app.nexnotas.com.br/entrar">
+            <Button variant="ghost" className="rounded-[10px] text-[#344054] hover:bg-[#f7f8ff] hover:text-[#061747]">Entrar</Button>
+          </a>
         </div>
       </header>
 
@@ -56,18 +57,22 @@ export function ReferralsPage() {
                 Programa de Afiliados Nex Notas
               </span>
               <h1 className="mt-7 font-heading text-[42px] font-semibold leading-[1.06] tracking-tight text-[#061747] sm:text-[58px] lg:text-[68px]">
-                Indique o Nex Notas e ganhe <span className="text-[#4f56f6]">20% de comissão recorrente</span>
+                Indique o Nex Notas e ganhe <span className="text-[#4f56f6]">20% recorrente</span>
               </h1>
               <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#667085] lg:mx-0">
                 Ajude afiliados Shopee PJ a resolver a emissão de notas da Comissão Extra e receba comissão enquanto o cliente indicado mantiver a assinatura ativa.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row lg:justify-start">
-                <Button href={affiliateUrl} target="_blank" rel="noreferrer" size="lg" className="gap-2 rounded-[10px] bg-[#4f56f6] px-6 text-white shadow-[0_16px_36px_rgba(79,86,246,.24)] hover:bg-[#454cf0]">
-                  Quero me afiliar <ArrowRight className="h-4 w-4" />
-                </Button>
-                <Button href="#regras" size="lg" variant="outline" className="rounded-[10px] border-[#dfe3ea] bg-white text-[#344054] hover:bg-[#f7f8ff]">
-                  Ver regras
-                </Button>
+                <a href={affiliateUrl} target="_blank" rel="noreferrer">
+                  <Button size="lg" className="gap-2 rounded-[10px] bg-[#4f56f6] px-6 text-white shadow-[0_16px_36px_rgba(79,86,246,.24)] hover:bg-[#454cf0]">
+                    Quero me afiliar <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </a>
+                <a href="#regras">
+                  <Button size="lg" variant="outline" className="rounded-[10px] border-[#dfe3ea] bg-white text-[#344054] hover:bg-[#f7f8ff]">
+                    Ver regras
+                  </Button>
+                </a>
               </div>
               <p className="mt-5 text-sm leading-6 text-[#7a8496]">
                 Cadastro, link de indicação e pagamentos feitos pela Cakto.
@@ -107,7 +112,7 @@ export function ReferralsPage() {
             <div className="mt-10 grid gap-4 md:grid-cols-3">
               <StepCard icon={Megaphone} title="Divulgue para afiliados Shopee" text="Fale com quem vende como PJ e precisa emitir notas da Comissão Extra todo mês." />
               <StepCard icon={Users} title="Use seu link da Cakto" text="Cadastre-se no programa, pegue seu link exclusivo e acompanhe as indicações pela plataforma." />
-              <StepCard icon={CircleDollarSign} title="Receba de forma recorrente" text="Quando o indicado assina e permanece ativo, você continua recebendo a comissão recorrente." />
+              <StepCard icon={CircleDollarSign} title="Receba de forma recorrente" text="Quando o indicado assina e permanece ativo, você segue participando da recorrência." />
             </div>
           </div>
         </section>
@@ -118,7 +123,7 @@ export function ReferralsPage() {
               <p className="text-xs font-semibold uppercase tracking-[.12em] text-[#5961e9]">Por que converte</p>
               <h2 className="mt-3 font-heading text-3xl font-semibold leading-tight tracking-tight text-[#061747] sm:text-[42px]">O afiliado Shopee PJ tem uma dor urgente e recorrente.</h2>
               <p className="mt-5 text-base leading-8 text-[#667085]">
-                Desde agosto de 2026, a operação com Comissão Extra exige mais organização fiscal. O Nex Notas transforma um relatório extenso da Shopee em um lote pronto para revisão e emissão, reduzindo a digitação manual e o risco de duplicidade.
+                Desde agosto de 2026, a operação com Comissão Extra exige mais organização fiscal. O Nex Notas transforma um relatório grande da Shopee em um lote pronto para revisão e emissão, reduzindo digitação manual e risco de duplicidade.
               </p>
             </div>
             <div className="grid gap-3">
@@ -162,11 +167,13 @@ export function ReferralsPage() {
             <p className="text-xs font-semibold uppercase tracking-[.12em] text-[#aeb6ff]">Convite aberto</p>
             <h2 className="font-heading text-3xl font-semibold leading-tight sm:text-[42px]">Entre no programa de afiliados da Nex Notas pela Cakto.</h2>
             <p className="max-w-2xl text-base leading-8 text-white/70">
-              Pegue seu link, divulgue para o público certo e acompanhe suas comissões recorrentes diretamente pela plataforma.
+              Pegue seu link, divulgue para o público certo e acompanhe suas comissões recorrentes direto pela plataforma.
             </p>
-            <Button href={affiliateUrl} target="_blank" rel="noreferrer" size="lg" className="gap-2 rounded-[10px] bg-white px-6 text-[#4f56f6] hover:bg-[#f4f5ff]">
-              Quero me afiliar <ArrowRight className="h-4 w-4" />
-            </Button>
+            <a href={affiliateUrl} target="_blank" rel="noreferrer">
+              <Button size="lg" className="gap-2 rounded-[10px] bg-white px-6 text-[#4f56f6] hover:bg-[#f4f5ff]">
+                Quero me afiliar <ArrowRight className="h-4 w-4" />
+              </Button>
+            </a>
           </div>
         </section>
       </main>
@@ -177,7 +184,6 @@ export function ReferralsPage() {
           <div className="flex gap-5">
             <a className="hover:text-[#4f56f6]" href="/">Início</a>
             <a className="hover:text-[#4f56f6]" href="/#planos">Planos</a>
-            <button type="button" className="hover:text-[#4f56f6]" onClick={openCookiePreferences}>Cookies</button>
             <a className="hover:text-[#4f56f6]" href="https://app.nexnotas.com.br/entrar">Entrar</a>
           </div>
         </div>
