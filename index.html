@@ -3,14 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Nex Notas - Emissão de NFS-e em lote para afiliados Shopee" />
+    <meta name="description" content="Emita as NFS-e da Comissão Extra da Shopee em lote: uma nota por vendedor, prévia antes de emitir, bloqueio de duplicidade e envio por e-mail." />
+    <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#4F56F6" />
+    <link rel="canonical" href="https://nexnotas.com.br/" />
+    <meta property="og:title" content="Nex Notas — NFS-e em lote para afiliados Shopee" />
+    <meta property="og:description" content="Emita as NFS-e da Comissão Extra da Shopee em lote: uma nota por vendedor, prévia antes de emitir, bloqueio de duplicidade e envio por e-mail." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:url" content="https://nexnotas.com.br/" />
+    <meta property="og:image" content="https://nexnotas.com.br/landing/painel-claro.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nex Notas — NFS-e em lote para afiliados Shopee" />
+    <meta name="twitter:description" content="Emita as NFS-e da Comissão Extra da Shopee em lote: uma nota por vendedor, prévia antes de emitir, bloqueio de duplicidade e envio por e-mail." />
+    <meta name="twitter:image" content="https://nexnotas.com.br/landing/painel-claro.webp" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <title>Nex Notas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet" />
+    <title>Nex Notas — NFS-e em lote para afiliados Shopee</title>
     <script>
-      document.documentElement.classList.remove("dark");
+      (function () {
+        var path = location.pathname;
+        var interior = path === "/ajuda" || path.indexOf("/ajuda/") === 0 || path === "/indicacoes" || path === "/programa-de-afiliados";
+        var root = document.documentElement;
+        if (interior) {
+          root.classList.remove("dark");
+          root.setAttribute("data-pref", "light");
+          root.setAttribute("data-theme", "light");
+          root.style.colorScheme = "light";
+          return;
+        }
+        var pref = "system";
+        try { pref = localStorage.getItem("nxl-theme") || "system"; } catch (e) {}
+        var media = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)");
+        var theme = pref === "system" ? (media && media.matches ? "dark" : "light") : pref;
+        root.setAttribute("data-pref", pref);
+        root.setAttribute("data-theme", theme);
+        root.classList.toggle("dark", theme === "dark");
+        root.style.colorScheme = theme;
+      })();
     </script>
     <!-- Google Tag Manager -->
     <script>
