@@ -58,7 +58,7 @@ test("simulador agrupa uma nota por loja", () => {
 test("a landing nao aponta para rotas inexistentes nem para a propriedade compartilhada", () => {
   const markup = readFileSync(new URL("./markup.html", import.meta.url), "utf8");
   const index = readFileSync(new URL("../../index.html", import.meta.url), "utf8");
-  for (const forbidden of ["app.nexnotas.com.br/cadastro", "app.nexnotas.com.br/signup", "G-6MTV9JCWFH", 'href="#"', "Tela real da prévia", "+23 mil", "Homologação municipal inclusa", "incluem a homologação", "Mercado Livre", "Amazon", "Ebazar"]) {
+  for (const forbidden of ["app.nexnotas.com.br/cadastro", "app.nexnotas.com.br/signup", "G-6MTV9JCWFH", 'href="#"', "Tela real da prévia", "+23 mil", "Homologação municipal inclusa", "incluem a homologação", "Mercado Livre", "Amazon", "Ebazar", "NFS-e NACIONAL", "NFS-e Nacional"]) {
     assert.equal(markup.includes(forbidden), false, forbidden);
     assert.equal(index.includes(forbidden), false, forbidden);
   }

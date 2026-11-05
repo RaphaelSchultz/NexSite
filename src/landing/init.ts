@@ -283,7 +283,7 @@ export function initLanding(root: HTMLElement) {
     const available = cityIsAvailable(publicCity, kind);
     cityResult.className = `res ${available ? "ok" : "bad"}`;
     const detail = available
-      ? (kind === "mei" ? "Para MEI, a emissão pode seguir pelo padrão nacional." : "Disponível pela NFS-e Nacional. Você pode emitir hoje.")
+      ? (kind === "mei" ? "Para MEI, a emissão pode seguir pelo padrão nacional." : "Você pode emitir hoje.")
       : publicCity.note;
     cityResult.innerHTML = `<span><b>${escapeHtml(publicCity.city)} / ${escapeHtml(publicCity.uf)} · ${kind === "mei" ? "MEI" : "ME / EPP / LTDA"}</b><br>${escapeHtml(detail)}</span>`;
   }
